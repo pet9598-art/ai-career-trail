@@ -78,11 +78,15 @@
 
   [hidden]{display:none!important;}
 
-  .progress-row{display:flex; justify-content:center; align-items:center; gap:7px; margin:6px 0 18px; flex-wrap:wrap;}
-  .dot{width:11px;height:11px;border-radius:50%; background:var(--surface-2); border:2px solid var(--line); transition:transform .2s ease;}
-  .dot.done{background:var(--accent); border-color:var(--accent);}
-  .dot.current{background:var(--accent-warm); border-color:var(--accent-warm-strong); transform:scale(1.3);}
-  .dot.goal{background:var(--accent-pop); border-color:var(--accent-pop);}
+  .progress-row{display:flex; justify-content:center; align-items:center; gap:4px; margin:6px 0 14px; flex-wrap:wrap;}
+  .stage-chip{
+    font-family:"Do Hyeon",sans-serif; font-size:12px; letter-spacing:.02em; padding:5px 11px; border-radius:999px;
+    background:var(--surface-2); color:var(--ink-soft); border:1.5px solid var(--line); transition:all .2s ease;
+  }
+  .stage-chip.done{background:var(--accent); color:#fff; border-color:var(--accent);}
+  .stage-chip.current{background:var(--accent-warm); color:#3a2c05; border-color:var(--accent-warm-strong); transform:scale(1.08);}
+  .stage-chip.goal{background:var(--accent-pop); color:#fff; border-color:var(--accent-pop);}
+  .stage-arrow{color:var(--ink-soft); font-size:12px;}
 
   .stage{
     position:relative; border-radius:26px; overflow:hidden; box-shadow:var(--shadow-soft);
@@ -90,29 +94,38 @@
     aspect-ratio:4/3;
   }
   .stage canvas{display:block; width:100%; height:100%;}
-  .stage__hint{
-    position:absolute; left:12px; bottom:10px; z-index:2;
-    font-size:11.5px; color:#ffffffcc; background:rgba(20,38,32,.45);
-    padding:4px 10px; border-radius:999px; backdrop-filter:blur(2px);
-    font-weight:500;
-  }
 
-  .card{background:var(--surface); border-radius:22px; box-shadow:var(--shadow-soft); padding:22px 20px; margin-top:16px;}
-  .q-text{font-size:19px; font-weight:700; line-height:1.5; margin:0 0 16px; text-align:center; text-wrap:balance;}
-  .choices{display:grid; gap:10px;}
-  .choice{
-    display:flex; align-items:center; gap:12px; text-align:left;
-    background:var(--surface-2); border:2px solid var(--line); border-radius:14px; padding:14px 16px;
-    font-family:"Noto Sans KR",sans-serif; font-size:15px; font-weight:500; color:var(--ink);
-    cursor:pointer; transition:border-color .15s ease, transform .1s ease, background .15s ease;
+  .hud-question{
+    position:absolute; left:0; top:0; z-index:3;
+    width:min(78%, 300px);
+    background:rgba(16,30,24,.86); backdrop-filter:blur(3px);
+    border-radius:16px; padding:12px 14px 11px; color:#fff;
+    box-shadow:0 10px 22px rgba(0,0,0,.32);
+    will-change:transform;
   }
-  .choice:hover{border-color:var(--accent); background:var(--chip-bg);}
-  .choice:active{transform:scale(.98);}
-  .choice:disabled{opacity:.5; cursor:default;}
-  .choice__mark{
-    flex:0 0 auto; width:26px;height:26px;border-radius:50%; display:flex;align-items:center;justify-content:center;
-    background:var(--surface); border:2px solid var(--line);
-    font-family:"Do Hyeon",sans-serif; font-size:13px; color:var(--ink-soft);
+  .hud-question::after{
+    content:""; position:absolute; left:50%; bottom:-7px; transform:translateX(-50%);
+    width:14px; height:14px; background:rgba(16,30,24,.86);
+    clip-path:polygon(0 0,100% 0,50% 100%);
+  }
+  .hud-stage-tag{
+    display:inline-block; font-family:"Do Hyeon",sans-serif; font-size:10.5px; letter-spacing:.06em;
+    color:#2c1f04; background:var(--accent-warm); padding:3px 9px; border-radius:999px; margin-bottom:7px;
+  }
+  .hud-q-text{font-size:13.5px; font-weight:700; line-height:1.45; margin:0 0 9px; color:#fff;}
+  .hud-choices{display:grid; gap:6px;}
+  .hud-choice{
+    display:flex; align-items:center; gap:9px; text-align:left;
+    background:rgba(255,255,255,.1); border:1.5px solid rgba(255,255,255,.22); border-radius:11px; padding:9px 11px;
+    font-family:"Noto Sans KR",sans-serif; font-size:12.5px; font-weight:500; color:#fff;
+    cursor:pointer; transition:background .15s ease, transform .1s ease;
+  }
+  .hud-choice:hover{background:rgba(255,255,255,.2);}
+  .hud-choice:active{transform:scale(.98);}
+  .hud-choice:disabled{opacity:.45; cursor:default;}
+  .hud-choice__mark{
+    flex:0 0 auto; width:20px;height:20px;border-radius:50%; display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.16); font-family:"Do Hyeon",sans-serif; font-size:11px; color:#fff;
   }
 
   .guide-toggle{
@@ -131,8 +144,14 @@
   .result-eyebrow{font-size:12.5px; letter-spacing:.08em; color:var(--accent-warm-strong); font-weight:700; margin-bottom:6px;}
   .result-title{font-family:"Do Hyeon",sans-serif; font-size:26px; color:var(--accent-strong); margin:0 0 6px; text-wrap:balance;}
   .result-tagline{color:var(--ink-soft); font-size:14.5px; margin:0 0 16px;}
-  .result-desc{font-size:14.5px; line-height:1.7; margin:0 0 6px; text-align:left;}
-  .result-path{font-size:12.5px; color:var(--ink-soft); text-align:left; margin:0 0 18px; line-height:1.6;}
+  .result-desc{font-size:14.5px; line-height:1.7; margin:0 0 14px; text-align:left;}
+  .roadmap-row{display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:4px; margin:0 0 18px;}
+  .roadmap-chip{display:flex; flex-direction:column; align-items:center; gap:2px; background:var(--chip-bg); border-radius:12px; padding:8px 10px; min-width:62px;}
+  .roadmap-chip .rc-label{font-family:"Do Hyeon",sans-serif; font-size:10px; color:var(--accent-warm-strong); letter-spacing:.04em;}
+  .roadmap-chip .rc-value{font-size:10.5px; color:var(--chip-ink); line-height:1.3; text-align:center; max-width:78px;}
+  .roadmap-arrow{color:var(--ink-soft); font-size:12px; padding:0 1px;}
+  .roadmap-chip.final{background:var(--accent);}
+  .roadmap-chip.final .rc-label, .roadmap-chip.final .rc-value{color:#fff;}
   .chip-group{margin-bottom:16px; text-align:left;}
   .chip-group h3{font-size:12px; letter-spacing:.06em; color:var(--ink-soft); margin:0 0 8px; font-weight:700;}
   .chips{display:flex; flex-wrap:wrap; gap:8px;}
@@ -142,11 +161,18 @@
     font-size:13.5px; line-height:1.6; text-align:left; margin-bottom:20px; color:var(--ink);
   }
   .btn-row{display:flex; justify-content:center; gap:10px; flex-wrap:wrap;}
+  .btn-secondary{
+    font-family:"Do Hyeon",sans-serif; font-size:15px; letter-spacing:.02em; color:var(--accent-strong);
+    background:var(--surface); border:2px solid var(--accent); border-radius:999px; padding:13px 22px; cursor:pointer;
+    transition:transform .12s ease;
+  }
+  .btn-secondary:active{transform:translateY(2px);}
 
-  @media (max-width:400px){ .q-text{font-size:17.5px;} }
+  @media (max-width:400px){ .hud-question{width:min(84%, 260px);} .hud-q-text{font-size:12.5px;} }
 </style>
 </head>
 <body>
+
 
 <div class="wrap">
   <div class="brand"><span class="brand__mark">AI 진로멘토링 체험</span></div>
@@ -169,12 +195,11 @@
 
     <div class="stage">
       <canvas id="gl"></canvas>
-      <div class="stage__hint" id="stage-hint">캐릭터를 따라 산길을 올라가 보세요</div>
-    </div>
-
-    <div class="card" id="panel-question">
-      <p class="q-text" id="q-text"></p>
-      <div class="choices" id="choices"></div>
+      <div class="hud-question" id="hud-question" hidden>
+        <span class="hud-stage-tag" id="hud-stage-tag"></span>
+        <p class="hud-q-text" id="hud-q-text"></p>
+        <div class="hud-choices" id="hud-choices"></div>
+      </div>
     </div>
 
     <div class="result-card" id="panel-result" hidden>
@@ -183,11 +208,14 @@
       <h2 class="result-title" id="result-title"></h2>
       <p class="result-tagline" id="result-tagline"></p>
       <p class="result-desc" id="result-desc"></p>
-      <p class="result-path" id="result-path"></p>
+      <div class="roadmap-row" id="roadmap-row"></div>
       <div class="chip-group"><h3>이런 직업으로 이어져요</h3><div class="chips" id="chips-jobs"></div></div>
       <div class="chip-group"><h3>관련 학과 예시</h3><div class="chips" id="chips-majors"></div></div>
-      <div class="talk-note">전문가 선생님께 <strong>"이 분야는 실제로 어떤 일을 하나요?"</strong> 라고 직접 물어보세요. 학과 이름에 'AI'가 없어도 이 분야로 갈 수 있어요.</div>
-      <div class="btn-row"><button class="btn-primary" id="btn-restart" type="button">다음 친구 도전하기</button></div>
+      <div class="talk-note">전문가 선생님께 <strong>"이 분야는 실제로 어떤 일을 하나요?"</strong> 라고 직접 물어보세요. 학과 이름에 "AI"가 없어도 이 분야로 갈 수 있어요.</div>
+      <div class="btn-row">
+        <button class="btn-secondary" id="btn-save-image" type="button">이미지로 저장</button>
+        <button class="btn-primary" id="btn-restart" type="button">다음 친구 도전하기</button>
+      </div>
     </div>
 
     <button class="guide-toggle" id="guide-toggle" type="button">진로교사용 진행 가이드 보기</button>
@@ -196,6 +224,7 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 (function(){
   // ---------------------------------------------------------------
@@ -227,38 +256,39 @@
   };
 
   // Questions asked while standing at a given node. Each choice names the node it leads to.
+  // The 4 steps map to a real career tech-tree: 중학교 → 고등학교 → 대학교 → 취업.
   var QUESTIONS = {
     start: { text:"평소에 AI(인공지능)를 사용해 본 적 있나요?", choices:[
       { label:"네, 챗봇이나 이미지 생성 AI를 써봤어요", to:"trailhead" },
       { label:"아니요, 아직 잘 몰라요", to:"trailhead" }
     ]},
-    trailhead: { text:"새로운 문제를 만나면 나는 주로?", choices:[
-      { label:"데이터와 근거부터 살펴본다", to:"logic" },
-      { label:"사람들 이야기부터 들어본다", to:"people" }
+    trailhead: { text:"고등학교에서 어떤 과목에 더 끌릴 것 같나요?", choices:[
+      { label:"수학·과학처럼 데이터와 근거로 답을 찾는 과목", to:"logic" },
+      { label:"국어·사회처럼 사람과 이야기를 다루는 과목", to:"people" }
     ]},
-    logic: { text:"그 다음엔 어떻게 하나요?", choices:[
-      { label:"직접 손으로 만들어보며 확인한다", to:"logic_hands" },
-      { label:"숫자로 분석하고 패턴을 찾는다", to:"logic_data" }
+    logic: { text:"대학에 진학한다면 어떤 공부가 더 끌리나요?", choices:[
+      { label:"직접 만들고 다루는 공학·기술 계열", to:"logic_hands" },
+      { label:"데이터를 분석하고 예측하는 통계·데이터 계열", to:"logic_data" }
     ]},
-    people: { text:"그 다음엔 어떻게 하나요?", choices:[
-      { label:"그림이나 글로 표현해본다", to:"people_creative" },
-      { label:"대화하며 서로의 생각을 나눈다", to:"people_talk" }
+    people: { text:"대학에 진학한다면 어떤 공부가 더 끌리나요?", choices:[
+      { label:"이미지나 이야기를 만드는 디자인·콘텐츠 계열", to:"people_creative" },
+      { label:"언어와 사람의 마음을 다루는 언어·인문 계열", to:"people_talk" }
     ]},
-    logic_hands: { text:"완성한 걸 보면 드는 생각은?", choices:[
-      { label:"더 정교하게 만들고 다듬고 싶다", to:"hands" },
-      { label:"왜 이렇게 움직이는지 원리가 궁금하다", to:"data" }
+    logic_hands: { text:"취업 후, 어떤 일을 더 하고 싶나요?", choices:[
+      { label:"직접 설계하고 만드는 일 (반도체·로봇)", to:"hands" },
+      { label:"원리를 분석하고 개선하는 일 (데이터·연구)", to:"data" }
     ]},
-    logic_data: { text:"데이터를 분석하는 이유는?", choices:[
-      { label:"패턴을 찾아 미래를 예측하고 싶어서", to:"data" },
-      { label:"이 결과가 공정하고 안전한지 확인하고 싶어서", to:"ethics" }
+    logic_data: { text:"취업 후, 데이터를 다루며 어떤 역할을 하고 싶나요?", choices:[
+      { label:"패턴을 찾아 미래를 예측하는 역할", to:"data" },
+      { label:"결과가 공정하고 안전한지 검증하는 역할", to:"ethics" }
     ]},
-    people_creative: { text:"표현한 결과물로 하고 싶은 건?", choices:[
-      { label:"더 많은 사람에게 상상력을 보여주고 싶다", to:"creative" },
-      { label:"AI가 이런 표현을 이해하고 함께 만들게 하고 싶다", to:"lang" }
+    people_creative: { text:"취업 후, 만든 결과물로 어떤 일을 하고 싶나요?", choices:[
+      { label:"더 많은 사람에게 상상력을 보여주는 창작 활동", to:"creative" },
+      { label:"AI가 표현을 이해하고 함께 만들게 하는 개발", to:"lang" }
     ]},
-    people_talk: { text:"대화를 나누는 이유는?", choices:[
-      { label:"AI가 사람의 말을 더 잘 알아듣게 하고 싶어서", to:"lang" },
-      { label:"상대의 마음에 공감하는 이야기를 함께 만들고 싶어서", to:"creative" }
+    people_talk: { text:"취업 후, 대화와 관련해 어떤 일을 하고 싶나요?", choices:[
+      { label:"AI가 사람의 말을 더 잘 알아듣게 만드는 일", to:"lang" },
+      { label:"마음에 공감하는 이야기를 함께 만드는 일", to:"creative" }
     ]}
   };
 
@@ -280,7 +310,7 @@
       jobs:["반도체설계엔지니어","로봇공학자"], majors:["전자공학과","로봇공학과","반도체공학과(계약학과)"] }
   };
 
-  var QUESTION_ORDER = ["start","trailhead","logic|people","fork|fork"]; // just for dot count (4 steps)
+  var STAGE_LABELS = ["중학교","고등학교","대학교","취업"];
   var TOTAL_STEPS = 4;
 
   // ---------------------------------------------------------------
@@ -291,19 +321,21 @@
 
   var screenStart = document.getElementById("screen-start");
   var screenPlay = document.getElementById("screen-play");
-  var panelQuestion = document.getElementById("panel-question");
+  var hudQuestion = document.getElementById("hud-question");
+  var hudStageTag = document.getElementById("hud-stage-tag");
+  var hudQText = document.getElementById("hud-q-text");
+  var hudChoicesEl = document.getElementById("hud-choices");
   var panelResult = document.getElementById("panel-result");
   var progressRow = document.getElementById("progress-row");
-  var qText = document.getElementById("q-text");
-  var choicesEl = document.getElementById("choices");
   var guideToggle = document.getElementById("guide-toggle");
   var guidePanel = document.getElementById("guide-panel");
-  var stageHint = document.getElementById("stage-hint");
+  var roadmapRow = document.getElementById("roadmap-row");
 
   guidePanel.innerHTML =
-    '<p>① 결과가 나오면 바로 전문가 선생님께 "이 분야는 실제로 어떤 일을 하나요?" 라고 연결해 주세요.</p>' +
-    '<p>② 학과 이름에 \'AI\'가 없어도 이 분야로 진출할 수 있다는 점을 꼭 짚어 주세요.</p>' +
-    '<p>③ 결과는 정답이 아니라 탐색의 출발점입니다. "실제로 끌리는 방향과 같았어?"라고 한 번 더 물어봐 주세요.</p>';
+    '<p>① 이 게임은 중학교 → 고등학교 → 대학교 → 취업 순서로 진로를 넓혀가는 구조예요. 각 단계의 선택은 결과 카드의 로드맵으로 정리돼요.</p>' +
+    '<p>② 결과가 나오면 바로 전문가 선생님께 "이 분야는 실제로 어떤 일을 하나요?" 라고 연결해 주세요.</p>' +
+    '<p>③ 학과 이름에 "AI"가 없어도 이 분야로 진출할 수 있다는 점을 꼭 짚어 주세요.</p>' +
+    '<p>④ 결과는 정답이 아니라 탐색의 출발점입니다. "이미지로 저장" 버튼으로 저장해 기록으로 남겨 보세요.</p>';
   guideToggle.addEventListener("click", function(){
     var open = !guidePanel.hidden;
     guidePanel.hidden = open;
@@ -340,11 +372,11 @@
   var camOffsetDir = camera.position.clone().sub(CAM_TARGET0);
   var camTarget = CAM_TARGET0.clone();
   var camTargetGoal = CAM_TARGET0.clone();
-  var zoomLevel = 1, zoomGoal = 1;
+  var zoomLevel = 0.74, zoomGoal = 0.74;
   function updateCameraGoal(nodeId, stepIndex){
     var n = NODES[nodeId];
-    camTargetGoal.set(n.x*0.55, n.y+1.4, n.z+2.2);
-    zoomGoal = Math.max(0.56, 1 - 0.12*stepIndex);
+    camTargetGoal.set(n.x*0.6, n.y+1.05, n.z+1.15);
+    zoomGoal = Math.max(0.4, 0.74 - 0.09*stepIndex);
   }
   function applyCamera(){
     camera.position.copy(camTarget).add(camOffsetDir);
@@ -472,6 +504,21 @@
 
   function litColorFor(kind){ return kind === "summit" ? PALETTE.summitLit : PALETTE.tileLit; }
 
+  var _hudVec = new THREE.Vector3();
+  function updateHudPosition(){
+    if (hudQuestion.hidden) return;
+    var w = stageEl.clientWidth, h = stageEl.clientHeight;
+    if (!w || !h) return;
+    _hudVec.set(character.position.x, character.position.y + 1.3, character.position.z);
+    _hudVec.project(camera);
+    var x = (_hudVec.x*0.5+0.5)*w;
+    var y = (1-(_hudVec.y*0.5+0.5))*h;
+    var bw = hudQuestion.offsetWidth || 240, bh = hudQuestion.offsetHeight || 120;
+    var left = Math.min(Math.max(x - bw/2, 8), Math.max(8, w - bw - 8));
+    var top = Math.min(Math.max(y - bh - 26, 8), Math.max(8, h - bh - 8));
+    hudQuestion.style.transform = "translate(" + left + "px," + top + "px)";
+  }
+
   // ---------------------------------------------------------------
   // Render / animation loop
   // ---------------------------------------------------------------
@@ -514,6 +561,7 @@
     camTarget.lerp(camTargetGoal, smooth);
     zoomLevel += (zoomGoal - zoomLevel) * smooth;
     applyCamera();
+    updateHudPosition();
 
     renderer.render(scene, camera);
   }
@@ -547,13 +595,19 @@
   // ---------------------------------------------------------------
   function renderProgress(){
     progressRow.innerHTML = "";
-    for (var i=0;i<TOTAL_STEPS;i++){
-      var d = document.createElement("span");
-      d.className = "dot" + (i<state.step ? " done" : (i===state.step ? " current":""));
-      progressRow.appendChild(d);
-    }
+    STAGE_LABELS.forEach(function(label, i){
+      var chip = document.createElement("span");
+      chip.className = "stage-chip" + (i<state.step ? " done" : (i===state.step ? " current":""));
+      chip.textContent = label;
+      progressRow.appendChild(chip);
+      var arrow = document.createElement("span");
+      arrow.className = "stage-arrow";
+      arrow.textContent = "›";
+      progressRow.appendChild(arrow);
+    });
     var goal = document.createElement("span");
-    goal.className = "dot goal";
+    goal.className = "stage-chip goal";
+    goal.textContent = "결과";
     progressRow.appendChild(goal);
   }
 
@@ -561,27 +615,29 @@
     renderProgress();
     updateCameraGoal(state.currentNode, state.step);
     var q = QUESTIONS[state.currentNode];
-    qText.textContent = q.text;
-    choicesEl.innerHTML = "";
+    hudStageTag.textContent = STAGE_LABELS[state.step] || "결과";
+    hudQText.textContent = q.text;
+    hudChoicesEl.innerHTML = "";
     q.choices.forEach(function(choice, idx){
       var btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "choice";
-      btn.innerHTML = '<span class="choice__mark">' + (idx===0 ? "A" : "B") + '</span><span>' + choice.label + '</span>';
+      btn.className = "hud-choice";
+      btn.innerHTML = '<span class="hud-choice__mark">' + (idx===0 ? "A" : "B") + '</span><span>' + choice.label + '</span>';
       btn.addEventListener("click", function(){ selectChoice(choice); });
-      choicesEl.appendChild(btn);
+      hudChoicesEl.appendChild(btn);
     });
+    hudQuestion.hidden = false;
   }
 
   function setChoicesDisabled(disabled){
-    Array.prototype.forEach.call(choicesEl.querySelectorAll(".choice"), function(b){ b.disabled = disabled; });
+    Array.prototype.forEach.call(hudChoicesEl.querySelectorAll(".hud-choice"), function(b){ b.disabled = disabled; });
   }
 
   function selectChoice(choice){
     setChoicesDisabled(true);
     var fromId = state.currentNode, toId = choice.to;
     lightUpPath(fromId, toId);
-    state.path.push({ from: fromId, to: toId, label: choice.label });
+    state.path.push({ from: fromId, to: toId, label: choice.label, stage: STAGE_LABELS[state.step] });
     moveCharacterTo(fromId, toId, function(){
       state.currentNode = toId;
       if (NODES[toId].kind === "summit"){
@@ -595,31 +651,48 @@
 
   function renderProgressComplete(){
     progressRow.innerHTML = "";
-    for (var i=0;i<TOTAL_STEPS;i++){
-      var d = document.createElement("span");
-      d.className = "dot done";
-      progressRow.appendChild(d);
-    }
+    STAGE_LABELS.forEach(function(label){
+      var chip = document.createElement("span");
+      chip.className = "stage-chip done";
+      chip.textContent = label;
+      progressRow.appendChild(chip);
+      var arrow = document.createElement("span");
+      arrow.className = "stage-arrow";
+      arrow.textContent = "›";
+      progressRow.appendChild(arrow);
+    });
     var goal = document.createElement("span");
-    goal.className = "dot goal done";
+    goal.className = "stage-chip goal done";
+    goal.textContent = "결과";
     progressRow.appendChild(goal);
   }
 
   function showResult(outcomeId){
     renderProgressComplete();
     updateCameraGoal(outcomeId, TOTAL_STEPS);
-    panelQuestion.hidden = true;
+    hudQuestion.hidden = true;
     panelResult.hidden = false;
-    stageHint.textContent = "정상 도착! 여기가 나의 AI 진로예요";
     var data = RESULTS[outcomeId];
     document.getElementById("result-icon").innerHTML = ICONS[data.icon];
     document.getElementById("result-title").textContent = data.title;
     document.getElementById("result-tagline").textContent = data.tagline;
     document.getElementById("result-desc").textContent = data.desc;
 
-    var meaningfulPath = state.path.filter(function(p){ return p.from !== "start"; });
-    document.getElementById("result-path").textContent =
-      "선택한 길: " + meaningfulPath.map(function(p){ return p.label; }).join("  →  ");
+    roadmapRow.innerHTML = "";
+    state.path.forEach(function(p){
+      var chip = document.createElement("div");
+      chip.className = "roadmap-chip";
+      chip.innerHTML = '<span class="rc-label">' + p.stage + '</span><span class="rc-value">' + p.label + '</span>';
+      roadmapRow.appendChild(chip);
+      var arrow = document.createElement("span");
+      arrow.className = "roadmap-arrow";
+      arrow.textContent = "→";
+      roadmapRow.appendChild(arrow);
+    });
+    var finalChip = document.createElement("div");
+    finalChip.className = "roadmap-chip final";
+    finalChip.innerHTML = '<span class="rc-label">결과</span><span class="rc-value">' + data.title + '</span>';
+    roadmapRow.appendChild(finalChip);
 
     var jobsEl = document.getElementById("chips-jobs"); jobsEl.innerHTML = "";
     data.jobs.forEach(function(j){ var c=document.createElement("span"); c.className="chip"; c.textContent=j; jobsEl.appendChild(c); });
@@ -644,10 +717,29 @@
     restY = NODES.start.y + 0.28;
     snapCameraTo("start", 0);
     panelResult.hidden = true;
-    panelQuestion.hidden = false;
-    stageHint.textContent = "캐릭터를 따라 산길을 올라가 보세요";
+    hudQuestion.hidden = true;
     screenStart.hidden = false;
     screenPlay.hidden = true;
+  }
+
+  function saveResultImage(){
+    if (!window.html2canvas) return;
+    var target = document.getElementById("panel-result");
+    var btns = target.querySelector(".btn-row");
+    if (btns) btns.style.visibility = "hidden";
+    window.html2canvas(target, { backgroundColor: null, scale: 2, useCORS: true }).then(function(canvas){
+      if (btns) btns.style.visibility = "";
+      try{
+        var link = document.createElement("a");
+        link.download = "AI진로카드.png";
+        link.href = canvas.toDataURL("image/png");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }catch(e){}
+    }).catch(function(){
+      if (btns) btns.style.visibility = "";
+    });
   }
 
   document.getElementById("btn-start").addEventListener("click", function(){
@@ -657,6 +749,7 @@
     renderQuestion();
   });
   document.getElementById("btn-restart").addEventListener("click", restart);
+  document.getElementById("btn-save-image").addEventListener("click", saveResultImage);
 
   try{
     if (window.claude && window.claude.hot){
