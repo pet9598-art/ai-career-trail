@@ -169,6 +169,30 @@
   }
   .name-row input:focus{outline:none; border-color:var(--accent);}
 
+  .qr-box{
+    display:flex; align-items:center; gap:14px; text-align:left;
+    background:var(--surface-2); border:1.5px dashed var(--accent); border-radius:16px;
+    padding:14px 16px; margin:0 0 16px;
+  }
+  .qr-box__img{
+    flex:0 0 auto; width:112px; height:112px; background:#ffffff;
+    border-radius:10px; padding:6px; box-shadow:0 3px 10px rgba(0,0,0,.12);
+  }
+  .qr-box__img svg{display:block; width:100%; height:100%;}
+  .qr-box__text{font-size:12.5px; line-height:1.55; color:var(--ink-soft);}
+  .qr-box__text strong{
+    display:block; margin-bottom:4px; font-size:14px; color:var(--accent-strong);
+    font-family:"Do Hyeon",sans-serif; letter-spacing:.01em;
+  }
+
+  .card-out{margin:0 0 16px; padding:16px 14px; border-radius:16px; background:var(--chip-bg);}
+  .card-out img{
+    display:block; width:100%; max-width:240px; margin:0 auto 12px;
+    border-radius:12px; box-shadow:var(--shadow-soft);
+  }
+  .card-out__hint{font-size:13px; line-height:1.65; color:var(--chip-ink); text-align:center;}
+  .card-out__hint strong{color:var(--accent-strong);}
+
   .btn-row{display:flex; justify-content:center; gap:10px; flex-wrap:wrap;}
   .btn-secondary{
     font-family:"Do Hyeon",sans-serif; font-size:15px; letter-spacing:.02em; color:var(--accent-strong);
@@ -299,6 +323,20 @@
         <label for="student-name">카드에 넣을 이름</label>
         <input id="student-name" type="text" maxlength="12" placeholder="예) 김하늘">
       </div>
+      <div class="qr-box" id="qr-section" hidden>
+        <div class="qr-box__img" id="qr-box"></div>
+        <div class="qr-box__text">
+          <strong>폰으로 QR을 찍어 가져가세요</strong>
+          내 결과 카드가 폰에서 그대로 열려요. 이름을 먼저 적으면 카드에도 이름이 들어갑니다.
+        </div>
+      </div>
+      <div class="card-out" id="card-out" hidden>
+        <img id="card-out-img" alt="AI 진로 포토카드">
+        <div class="card-out__hint">
+          폰에서는 <strong>이미지를 꾹 눌러</strong> "사진에 저장"을 선택하세요.<br>
+          컴퓨터에서는 아래 저장 버튼을 누르면 바로 내려받아집니다.
+        </div>
+      </div>
       <div class="btn-row">
         <button class="btn-secondary" id="btn-save-image" type="button">포토카드 저장</button>
         <button class="btn-primary" id="btn-restart" type="button">다음 친구 도전하기</button>
@@ -349,6 +387,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>
 (function(){
   // =================================================================
@@ -516,8 +555,41 @@
   // =================================================================
   // 2. STATE + DOM
   // =================================================================
-  var state = { step:0, currentNode:"start", path:[] };
+  var state = { step:0, currentNode:"start", path:[], picks:[] };
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // A finished run is just 6 binary choices, so it fits in 6 bits — one URL-safe
+  // character. That is what the result QR encodes, so a phone can reopen the
+  // exact same card without any server.
+  var CODE_ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_";
+  var arrivedViaQr = false;
+
+  function getParam(key){
+    var q = location.search;
+    if (!q || q.charAt(0) !== "?") return "";
+    var parts = q.substring(1).split("&");
+    for (var i = 0; i < parts.length; i++){
+      var kv = parts[i].split("=");
+      if (decodeURIComponent(kv[0]) === key){
+        try { return decodeURIComponent((kv[1] || "").split("+").join(" ")); }
+        catch(e){ return ""; }
+      }
+    }
+    return "";
+  }
+
+  function picksToCode(picks){
+    var n = 0;
+    for (var i = 0; i < picks.length; i++) n = (n * 2) + (picks[i] ? 1 : 0);
+    return CODE_ALPHABET.charAt(n);
+  }
+  function codeToPicks(ch){
+    var n = CODE_ALPHABET.indexOf(ch);
+    if (n < 0) return null;
+    var picks = [];
+    for (var b = TOTAL_STEPS - 1; b >= 0; b--) picks.push(Math.floor(n / Math.pow(2, b)) % 2);
+    return picks;
+  }
 
   var screenStart = document.getElementById("screen-start");
   var screenPlay = document.getElementById("screen-play");
@@ -538,7 +610,8 @@
     '<p>② 점수 계산이 아니라 선택한 길 그대로 이어지는 방식이라, "왜 이 결과가 나왔는지" 아이와 함께 되짚어 볼 수 있어요.</p>' +
     '<p>③ 결과가 나오면 바로 전문가 선생님께 "이 분야는 실제로 어떤 일을 하나요?" 라고 연결해 주세요.</p>' +
     '<p>④ 학과 이름에 "AI"가 없어도 이 분야로 진출할 수 있다는 점을 꼭 짚어 주세요.</p>' +
-    '<p>⑤ 이름을 적고 "포토카드 저장"을 누르면 세로형 이미지로 저장돼요. 결과는 정답이 아니라 탐색의 출발점입니다.</p>';
+    '<p>⑤ 이름을 적으면 결과 화면에 QR이 뜹니다. 아이가 자기 폰으로 QR을 찍으면 같은 카드가 폰에서 열려요.</p>' +
+    '<p>⑥ 폰에서는 카드 이미지를 꾹 눌러 저장하고, 컴퓨터에서는 "포토카드 저장" 버튼을 누르면 됩니다. 결과는 정답이 아니라 탐색의 출발점입니다.</p>';
   guideToggle.addEventListener("click", function(){
     var open = !guidePanel.hidden;
     guidePanel.hidden = open;
@@ -1033,7 +1106,7 @@
       btn.type = "button";
       btn.className = "hud-choice";
       btn.innerHTML = '<span class="hud-choice__mark">' + (idx === 0 ? "A" : "B") + '</span><span>' + choice.label + '</span>';
-      btn.addEventListener("click", function(){ selectChoice(choice); });
+      btn.addEventListener("click", function(){ selectChoice(choice, idx); });
       hudChoicesEl.appendChild(btn);
     });
     hudQuestion.hidden = false;
@@ -1044,11 +1117,12 @@
     Array.prototype.forEach.call(hudChoicesEl.querySelectorAll(".hud-choice"), function(b){ b.disabled = disabled; });
   }
 
-  function selectChoice(choice){
+  function selectChoice(choice, idx){
     setChoicesDisabled(true);
     var fromId = state.currentNode, toId = choice.to;
     lightUpPath(fromId, toId);
     state.path.push({ stage: STAGE_LABELS[state.step], label: choice.label, short: choice.short });
+    state.picks.push(idx ? 1 : 0);
     hudQuestion.hidden = true;
     moveCharacterTo(fromId, toId, function(){
       state.currentNode = toId;
@@ -1092,7 +1166,67 @@
 
     fillChips(document.getElementById("chips-jobs"), data.jobs, "chip");
     fillChips(document.getElementById("chips-majors"), data.majors, "chip");
+    renderQr();
     panelResult.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block:"start" });
+  }
+
+  // ---- result QR: reopens this exact card on the student phone ----
+  function currentResultUrl(){
+    var base = location.origin + location.pathname;
+    var url = base + "?c=" + picksToCode(state.picks);
+    var nm = (nameInput.value || "").trim();
+    if (nm) url += "&n=" + encodeURIComponent(nm);
+    return url;
+  }
+
+  function renderQr(){
+    var section = document.getElementById("qr-section");
+    var host = document.getElementById("qr-box");
+    // Someone who arrived by scanning is already on their own phone.
+    if (arrivedViaQr || state.picks.length !== TOTAL_STEPS || typeof qrcode === "undefined"){
+      section.hidden = true;
+      return;
+    }
+    try{
+      var qr = qrcode(0, "M");
+      qr.addData(currentResultUrl());
+      qr.make();
+      host.innerHTML = qr.createSvgTag({ cellSize:4, margin:1, scalable:true });
+      section.hidden = false;
+    }catch(e){
+      section.hidden = true;
+    }
+  }
+
+  // Rebuild the card straight from a URL code, with no animation.
+  function replayFromCode(picks, name){
+    var node = "start";
+    state = { step:0, currentNode:"start", path:[], picks:[] };
+    for (var i = 0; i < picks.length; i++){
+      var q = QUESTIONS[node];
+      if (!q) return false;
+      var choice = q.choices[picks[i]];
+      if (!choice) return false;
+      lightUpPath(node, choice.to);
+      state.path.push({ stage: STAGE_LABELS[i], label: choice.label, short: choice.short });
+      state.picks.push(picks[i]);
+      node = choice.to;
+      state.step = i + 1;
+    }
+    if (!NODES[node] || NODES[node].kind !== "summit") return false;
+
+    screenStart.hidden = true;
+    screenPlay.hidden = false;
+    fitRenderer();
+    character.position.set(NODES[node].x, NODES[node].y + 0.3, NODES[node].z);
+    character.rotation.y = IDLE_YAW;
+    yawGoal = IDLE_YAW;
+    restY = NODES[node].y + 0.3;
+    snapCameraTo(node, TOTAL_STEPS);
+    state.currentNode = node;
+    if (name) nameInput.value = name;
+    showResult(node);
+    return true;
   }
 
   function fillChips(host, items, cls){
@@ -1117,7 +1251,12 @@
   }
 
   function restart(){
-    state = { step:0, currentNode:"start", path:[] };
+    state = { step:0, currentNode:"start", path:[], picks:[] };
+    arrivedViaQr = false;
+    document.getElementById("card-out").hidden = true;
+    document.getElementById("card-out-img").removeAttribute("src");
+    document.getElementById("qr-section").hidden = true;
+    if (location.search) history.replaceState(null, "", location.pathname);
     resetSceneColors();
     character.position.set(NODES.start.x, NODES.start.y + 0.3, NODES.start.z);
     character.rotation.y = IDLE_YAW;
@@ -1221,12 +1360,21 @@
         width: 1080, height: 1920, windowWidth: 1080, windowHeight: 1920
       }).then(function(cv){
         var fileName = (nameInput.value || "").trim();
+        var dataUrl = cv.toDataURL("image/png");
+
+        // Show the finished card on the page. On iPhones the download link below
+        // is unreliable, but long-pressing a visible image always works.
+        var outImg = document.getElementById("card-out-img");
+        outImg.src = dataUrl;
+        document.getElementById("card-out").hidden = false;
+
         var link = document.createElement("a");
         link.download = (fileName ? fileName + "_" : "") + "AI진로카드.png";
-        link.href = cv.toDataURL("image/png");
+        link.href = dataUrl;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        document.getElementById("card-out").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block:"center" });
       }).catch(function(){}).then(function(){
         saveBtn.disabled = false;
         saveBtn.textContent = "포토카드 저장";
@@ -1253,6 +1401,23 @@
   });
   document.getElementById("btn-restart").addEventListener("click", restart);
   saveBtn.addEventListener("click", saveResultImage);
+  // Keep the QR in step with the name, so the scanned card carries it too.
+  nameInput.addEventListener("input", function(){
+    if (!panelResult.hidden) renderQr();
+  });
+
+  // Opened from a scanned QR: rebuild that exact card immediately.
+  (function bootFromUrl(){
+    var code = getParam("c");
+    if (!code) return;
+    var picks = codeToPicks(code);
+    if (!picks) return;
+    arrivedViaQr = true;
+    if (!replayFromCode(picks, getParam("n"))){
+      arrivedViaQr = false;
+      restart();
+    }
+  })();
 
   // Expose a tiny hook so the branching can be audited from the console.
   window.AI_TRAIL = { NODES:NODES, QUESTIONS:QUESTIONS, RESULTS:RESULTS, state:function(){ return state; } };
