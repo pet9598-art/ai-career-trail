@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 진로 트레일</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+  :root{
+    --bg-top:#eaf5ee;
+    --bg-bot:#dcefe3;
+    --surface:#ffffff;
+    --surface-2:#f3f8f4;
+    --ink:#1c2b22;
+    --ink-soft:#4b5c51;
+    --line:#d6e6dc;
+    --accent:#2f6b4f;
+    --accent-strong:#204e3a;
+    --accent-warm:#e2a33d;
+    --accent-warm-strong:#c1841f;
+    --accent-pop:#d64550;
+    --hill-1:#bfe0cb;
+    --hill-2:#9ccdae;
+    --hill-3:#6fb389;
+    --sky-sun:#ffd97a;
+    --chip-bg:#eef6f0;
+    --chip-ink:#20422f;
+    --shadow-soft:0 18px 40px rgba(28,43,34,.14);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg-top:#0d1a14; --bg-bot:#0a130f; --surface:#142620; --surface-2:#0e1e18;
+      --ink:#e9f3ec; --ink-soft:#a9bfb1; --line:#243d31;
+      --accent:#6fcf97; --accent-strong:#8ee3ae; --accent-warm:#f0b94d; --accent-warm-strong:#ffce6e; --accent-pop:#ff7a83;
+      --hill-1:#173226; --hill-2:#1f4131; --hill-3:#265239; --sky-sun:#f4c86b;
+      --chip-bg:#1b3226; --chip-ink:#bfe7cd;
+      --shadow-soft:0 18px 40px rgba(0,0,0,.45);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg-top:#0d1a14; --bg-bot:#0a130f; --surface:#142620; --surface-2:#0e1e18;
+    --ink:#e9f3ec; --ink-soft:#a9bfb1; --line:#243d31;
+    --accent:#6fcf97; --accent-strong:#8ee3ae; --accent-warm:#f0b94d; --accent-warm-strong:#ffce6e; --accent-pop:#ff7a83;
+    --hill-1:#173226; --hill-2:#1f4131; --hill-3:#265239; --sky-sun:#f4c86b;
+    --chip-bg:#1b3226; --chip-ink:#bfe7cd;
+    --shadow-soft:0 18px 40px rgba(0,0,0,.45);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:linear-gradient(180deg,var(--bg-top),var(--bg-bot));
+    color:var(--ink);
+    font-family:"Noto Sans KR",system-ui,-apple-system,sans-serif;
+    padding:24px 16px 48px;
+    min-height:100vh;
+  }
+  .wrap{max-width:600px;margin:0 auto;}
+  .brand{display:flex; align-items:baseline; justify-content:center; gap:10px; margin-bottom:4px;}
+  .brand__mark{font-family:"Do Hyeon",sans-serif; font-size:15px; letter-spacing:.08em; color:var(--accent-warm-strong);}
+  h1.title{
+    font-family:"Do Hyeon",sans-serif; text-align:center;
+    font-size:clamp(28px,7vw,38px); margin:0 0 8px; color:var(--accent-strong); text-wrap:balance;
+  }
+  p.tagline{text-align:center; color:var(--ink-soft); margin:0 auto 26px; max-width:38ch; line-height:1.6; font-size:15px;}
+
+  .start-card{background:var(--surface); border-radius:26px; box-shadow:var(--shadow-soft); padding:28px 22px 26px; text-align:center;}
+  .start-illustration{width:100%;max-width:320px;margin:0 auto 18px;display:block;}
+  .btn-primary{
+    font-family:"Do Hyeon",sans-serif; font-size:19px; letter-spacing:.02em; color:#ffffff;
+    background:linear-gradient(180deg,var(--accent),var(--accent-strong));
+    border:none; border-radius:999px; padding:15px 34px; cursor:pointer;
+    box-shadow:0 8px 0 var(--accent-strong), 0 14px 24px rgba(32,78,58,.35);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn-primary:active{transform:translateY(6px); box-shadow:0 2px 0 var(--accent-strong), 0 6px 14px rgba(32,78,58,.3);}
+  .start-meta{margin-top:16px; font-size:13px; color:var(--ink-soft);}
+
+  [hidden]{display:none!important;}
+
+  .progress-row{display:flex; justify-content:center; align-items:center; gap:7px; margin:6px 0 18px; flex-wrap:wrap;}
+  .dot{width:11px;height:11px;border-radius:50%; background:var(--surface-2); border:2px solid var(--line); transition:transform .2s ease;}
+  .dot.done{background:var(--accent); border-color:var(--accent);}
+  .dot.current{background:var(--accent-warm); border-color:var(--accent-warm-strong); transform:scale(1.3);}
+  .dot.goal{background:var(--accent-pop); border-color:var(--accent-pop);}
+
+  .stage{
+    position:relative; border-radius:26px; overflow:hidden; box-shadow:var(--shadow-soft);
+    border:1px solid var(--line); background:var(--surface-2);
+    aspect-ratio:4/3;
+  }
+  .stage canvas{display:block; width:100%; height:100%;}
+  .stage__hint{
+    position:absolute; left:12px; bottom:10px; z-index:2;
+    font-size:11.5px; color:#ffffffcc; background:rgba(20,38,32,.45);
+    padding:4px 10px; border-radius:999px; backdrop-filter:blur(2px);
+    font-weight:500;
+  }
+
+  .card{background:var(--surface); border-radius:22px; box-shadow:var(--shadow-soft); padding:22px 20px; margin-top:16px;}
+  .q-text{font-size:19px; font-weight:700; line-height:1.5; margin:0 0 16px; text-align:center; text-wrap:balance;}
+  .choices{display:grid; gap:10px;}
+  .choice{
+    display:flex; align-items:center; gap:12px; text-align:left;
+    background:var(--surface-2); border:2px solid var(--line); border-radius:14px; padding:14px 16px;
+    font-family:"Noto Sans KR",sans-serif; font-size:15px; font-weight:500; color:var(--ink);
+    cursor:pointer; transition:border-color .15s ease, transform .1s ease, background .15s ease;
+  }
+  .choice:hover{border-color:var(--accent); background:var(--chip-bg);}
+  .choice:active{transform:scale(.98);}
+  .choice:disabled{opacity:.5; cursor:default;}
+  .choice__mark{
+    flex:0 0 auto; width:26px;height:26px;border-radius:50%; display:flex;align-items:center;justify-content:center;
+    background:var(--surface); border:2px solid var(--line);
+    font-family:"Do Hyeon",sans-serif; font-size:13px; color:var(--ink-soft);
+  }
+
+  .guide-toggle{
+    display:block; margin:14px auto 0; background:none; border:1px dashed var(--line); color:var(--ink-soft);
+    font-size:12.5px; padding:7px 14px; border-radius:999px; cursor:pointer;
+  }
+  .guide-panel{margin-top:10px; padding:14px 16px; border-radius:14px; background:var(--chip-bg); color:var(--chip-ink); font-size:13px; line-height:1.65;}
+  .guide-panel p{margin:0 0 6px;} .guide-panel p:last-child{margin-bottom:0;}
+
+  .result-card{background:var(--surface); border-radius:24px; box-shadow:var(--shadow-soft); padding:26px 22px; text-align:center;}
+  .result-icon{
+    width:64px; height:64px; margin:0 auto 12px; display:flex; align-items:center; justify-content:center;
+    border-radius:50%; background:var(--chip-bg); color:var(--accent-strong);
+  }
+  .result-icon svg{width:32px;height:32px;}
+  .result-eyebrow{font-size:12.5px; letter-spacing:.08em; color:var(--accent-warm-strong); font-weight:700; margin-bottom:6px;}
+  .result-title{font-family:"Do Hyeon",sans-serif; font-size:26px; color:var(--accent-strong); margin:0 0 6px; text-wrap:balance;}
+  .result-tagline{color:var(--ink-soft); font-size:14.5px; margin:0 0 16px;}
+  .result-desc{font-size:14.5px; line-height:1.7; margin:0 0 6px; text-align:left;}
+  .result-path{font-size:12.5px; color:var(--ink-soft); text-align:left; margin:0 0 18px; line-height:1.6;}
+  .chip-group{margin-bottom:16px; text-align:left;}
+  .chip-group h3{font-size:12px; letter-spacing:.06em; color:var(--ink-soft); margin:0 0 8px; font-weight:700;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{background:var(--chip-bg); color:var(--chip-ink); font-size:13.5px; font-weight:500; padding:7px 13px; border-radius:999px;}
+  .talk-note{
+    background:var(--surface-2); border-left:3px solid var(--accent-warm); border-radius:10px; padding:12px 14px;
+    font-size:13.5px; line-height:1.6; text-align:left; margin-bottom:20px; color:var(--ink);
+  }
+  .btn-row{display:flex; justify-content:center; gap:10px; flex-wrap:wrap;}
+
+  @media (max-width:400px){ .q-text{font-size:17.5px;} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="brand"><span class="brand__mark">AI 진로멘토링 체험</span></div>
+  <h1 class="title">AI 진로 트레일</h1>
+  <p class="tagline">네 번의 갈림길을 지나 나에게 어울리는 AI 분야 봉우리에 도착하는 여정</p>
+
+  <section id="screen-start" class="start-card">
+    <svg class="start-illustration" viewBox="0 0 320 140" aria-hidden="true">
+      <circle cx="252" cy="34" r="20" fill="var(--sky-sun)"/>
+      <path fill="var(--hill-1)" d="M0,110 Q60,70 120,100 T240,90 T320,105 L320,140 L0,140 Z"/>
+      <path fill="var(--hill-2)" d="M0,120 Q80,90 160,115 T320,110 L320,140 L0,140 Z"/>
+      <path fill="var(--hill-3)" d="M0,132 Q100,112 200,130 T320,120 L320,140 L0,140 Z"/>
+    </svg>
+    <button class="btn-primary" id="btn-start" type="button">여행 시작하기</button>
+    <p class="start-meta">4개의 갈림길 · 약 2~3분 소요</p>
+  </section>
+
+  <section id="screen-play" hidden>
+    <div class="progress-row" id="progress-row"></div>
+
+    <div class="stage">
+      <canvas id="gl"></canvas>
+      <div class="stage__hint" id="stage-hint">캐릭터를 따라 산길을 올라가 보세요</div>
+    </div>
+
+    <div class="card" id="panel-question">
+      <p class="q-text" id="q-text"></p>
+      <div class="choices" id="choices"></div>
+    </div>
+
+    <div class="result-card" id="panel-result" hidden>
+      <div class="result-eyebrow">도착! 나의 AI 진로 유형</div>
+      <div class="result-icon" id="result-icon"></div>
+      <h2 class="result-title" id="result-title"></h2>
+      <p class="result-tagline" id="result-tagline"></p>
+      <p class="result-desc" id="result-desc"></p>
+      <p class="result-path" id="result-path"></p>
+      <div class="chip-group"><h3>이런 직업으로 이어져요</h3><div class="chips" id="chips-jobs"></div></div>
+      <div class="chip-group"><h3>관련 학과 예시</h3><div class="chips" id="chips-majors"></div></div>
+      <div class="talk-note">전문가 선생님께 <strong>"이 분야는 실제로 어떤 일을 하나요?"</strong> 라고 직접 물어보세요. 학과 이름에 'AI'가 없어도 이 분야로 갈 수 있어요.</div>
+      <div class="btn-row"><button class="btn-primary" id="btn-restart" type="button">다음 친구 도전하기</button></div>
+    </div>
+
+    <button class="guide-toggle" id="guide-toggle" type="button">진로교사용 진행 가이드 보기</button>
+    <div class="guide-panel" id="guide-panel" hidden></div>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  // ---------------------------------------------------------------
+  // Content: icons, question graph, results
+  // ---------------------------------------------------------------
+  var ICONS = {
+    data: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/></svg>',
+    lang: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9.4 8.3 8.5 8.5 0 0 1-3.8-1L3 20l1.2-4.8A8.38 8.38 0 0 1 3 11.5 8.5 8.5 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg>',
+    creative: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a9 9 0 1 1 0-18c4.5 0 8 2.7 8 6.5 0 2-1.3 3.5-3.2 3.5h-1.7a1.7 1.7 0 0 0-1 3 1.5 1.5 0 0 1-1 2.6z"/><circle cx="7.5" cy="10.5" r="1"/><circle cx="10.5" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/></svg>',
+    ethics: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 8h14"/><path d="M5 8 2.5 14a3 3 0 0 0 5 0Z"/><path d="M19 8l-2.5 6a3 3 0 0 0 5 0Z"/><path d="M8 21h8"/></svg>',
+    hands: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1.1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.4 1Z"/></svg>'
+  };
+
+  // Node graph. Positions are in Three.js world units (x lateral, y height, z depth up the mountain).
+  var NODES = {
+    start:            { x: 0,    y: 0,   z: 0,    kind: "gate" },
+    trailhead:        { x: 0,    y: 0.3, z: 3.2,  kind: "gate" },
+    logic:            { x: -3.2, y: 0.7, z: 7,    kind: "fork" },
+    people:           { x: 3.2,  y: 0.7, z: 7,    kind: "fork" },
+    logic_hands:      { x: -5.4, y: 1.3, z: 11.3, kind: "fork" },
+    logic_data:       { x: -1.4, y: 1.3, z: 11.3, kind: "fork" },
+    people_creative:  { x: 1.4,  y: 1.3, z: 11.3, kind: "fork" },
+    people_talk:      { x: 5.4,  y: 1.3, z: 11.3, kind: "fork" },
+    hands:    { x: -7,   y: 2.1, z: 15.6, kind: "summit" },
+    data:     { x: -3.3, y: 2.1, z: 15.6, kind: "summit" },
+    ethics:   { x: 0,    y: 2.1, z: 15.6, kind: "summit" },
+    lang:     { x: 3.3,  y: 2.1, z: 15.6, kind: "summit" },
+    creative: { x: 7,    y: 2.1, z: 15.6, kind: "summit" }
+  };
+
+  // Questions asked while standing at a given node. Each choice names the node it leads to.
+  var QUESTIONS = {
+    start: { text:"평소에 AI(인공지능)를 사용해 본 적 있나요?", choices:[
+      { label:"네, 챗봇이나 이미지 생성 AI를 써봤어요", to:"trailhead" },
+      { label:"아니요, 아직 잘 몰라요", to:"trailhead" }
+    ]},
+    trailhead: { text:"새로운 문제를 만나면 나는 주로?", choices:[
+      { label:"데이터와 근거부터 살펴본다", to:"logic" },
+      { label:"사람들 이야기부터 들어본다", to:"people" }
+    ]},
+    logic: { text:"그 다음엔 어떻게 하나요?", choices:[
+      { label:"직접 손으로 만들어보며 확인한다", to:"logic_hands" },
+      { label:"숫자로 분석하고 패턴을 찾는다", to:"logic_data" }
+    ]},
+    people: { text:"그 다음엔 어떻게 하나요?", choices:[
+      { label:"그림이나 글로 표현해본다", to:"people_creative" },
+      { label:"대화하며 서로의 생각을 나눈다", to:"people_talk" }
+    ]},
+    logic_hands: { text:"완성한 걸 보면 드는 생각은?", choices:[
+      { label:"더 정교하게 만들고 다듬고 싶다", to:"hands" },
+      { label:"왜 이렇게 움직이는지 원리가 궁금하다", to:"data" }
+    ]},
+    logic_data: { text:"데이터를 분석하는 이유는?", choices:[
+      { label:"패턴을 찾아 미래를 예측하고 싶어서", to:"data" },
+      { label:"이 결과가 공정하고 안전한지 확인하고 싶어서", to:"ethics" }
+    ]},
+    people_creative: { text:"표현한 결과물로 하고 싶은 건?", choices:[
+      { label:"더 많은 사람에게 상상력을 보여주고 싶다", to:"creative" },
+      { label:"AI가 이런 표현을 이해하고 함께 만들게 하고 싶다", to:"lang" }
+    ]},
+    people_talk: { text:"대화를 나누는 이유는?", choices:[
+      { label:"AI가 사람의 말을 더 잘 알아듣게 하고 싶어서", to:"lang" },
+      { label:"상대의 마음에 공감하는 이야기를 함께 만들고 싶어서", to:"creative" }
+    ]}
+  };
+
+  var RESULTS = {
+    data:{ icon:"data", title:"데이터사이언스 · 머신러닝형", tagline:"숫자와 패턴 속에서 답을 찾아내는 탐험가",
+      desc:"데이터 속에 숨은 규칙을 읽어내고, 그걸로 미래를 예측하는 일에 강해요. 수학·통계 공부가 큰 힘이 되는 분야예요.",
+      jobs:["데이터사이언티스트","머신러닝엔지니어","AI연구원"], majors:["데이터사이언스학과","통계학과","산업공학과"] },
+    lang:{ icon:"lang", title:"AI 언어·소통형", tagline:"AI가 사람의 말과 마음을 이해하게 만드는 통역사",
+      desc:"사람의 말과 감정을 잘 읽어내고, AI가 사람과 자연스럽게 대화하도록 설계하는 역할에 잘 맞아요.",
+      jobs:["NLP엔지니어","AI서비스기획자","프롬프트엔지니어"], majors:["소프트웨어학과","언어학과","경영학과(AI융합)"] },
+    creative:{ icon:"creative", title:"생성형 AI 크리에이터형", tagline:"AI를 붓과 펜처럼 다루는 창작자",
+      desc:"상상한 장면을 눈에 보이게, 떠오른 이야기를 글로 만들어내는 힘이 있어요. AI는 훌륭한 창작 도구가 되어줄 거예요.",
+      jobs:["AI아티스트","AI작가","AI콘텐츠기획자"], majors:["디자인학과","미디어콘텐츠학과","문예창작과(AI융합)"] },
+    ethics:{ icon:"ethics", title:"AI 신뢰·윤리형", tagline:"기술과 사람 사이의 균형을 지키는 안전요원",
+      desc:"AI가 공정하고 안전하게 쓰이는지 살피는 역할이에요. 앞으로 가장 중요해질 분야 중 하나로 꼽혀요.",
+      jobs:["AI 신뢰성 검증 전문가","AI 정책기획자"], majors:["인공지능학과","철학과","법학과(AI융합)"] },
+    hands:{ icon:"hands", title:"AI 반도체·로보틱스형", tagline:"AI에게 몸을 만들어주는 엔지니어",
+      desc:"직접 만들고 움직이게 하는 걸 좋아하는 사람이에요. AI의 두뇌(반도체)와 몸(로봇)을 만드는 일에 잘 맞아요.",
+      jobs:["반도체설계엔지니어","로봇공학자"], majors:["전자공학과","로봇공학과","반도체공학과(계약학과)"] }
+  };
+
+  var QUESTION_ORDER = ["start","trailhead","logic|people","fork|fork"]; // just for dot count (4 steps)
+  var TOTAL_STEPS = 4;
+
+  // ---------------------------------------------------------------
+  // Game state
+  // ---------------------------------------------------------------
+  var state = { step:0, currentNode:"start", path:[] };
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var screenStart = document.getElementById("screen-start");
+  var screenPlay = document.getElementById("screen-play");
+  var panelQuestion = document.getElementById("panel-question");
+  var panelResult = document.getElementById("panel-result");
+  var progressRow = document.getElementById("progress-row");
+  var qText = document.getElementById("q-text");
+  var choicesEl = document.getElementById("choices");
+  var guideToggle = document.getElementById("guide-toggle");
+  var guidePanel = document.getElementById("guide-panel");
+  var stageHint = document.getElementById("stage-hint");
+
+  guidePanel.innerHTML =
+    '<p>① 결과가 나오면 바로 전문가 선생님께 "이 분야는 실제로 어떤 일을 하나요?" 라고 연결해 주세요.</p>' +
+    '<p>② 학과 이름에 'AI'가 없어도 이 분야로 진출할 수 있다는 점을 꼭 짚어 주세요.</p>' +
+    '<p>③ 결과는 정답이 아니라 탐색의 출발점입니다. "실제로 끌리는 방향과 같았어?"라고 한 번 더 물어봐 주세요.</p>';
+  guideToggle.addEventListener("click", function(){
+    var open = !guidePanel.hidden;
+    guidePanel.hidden = open;
+    guideToggle.textContent = open ? "진로교사용 진행 가이드 보기" : "진행 가이드 닫기";
+  });
+
+  // ---------------------------------------------------------------
+  // Three.js scene
+  // ---------------------------------------------------------------
+  var canvas = document.getElementById("gl");
+  var stageEl = canvas.parentElement;
+  var isDark = (document.documentElement.getAttribute("data-theme") === "dark") ||
+    (!document.documentElement.hasAttribute("data-theme") && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+  var PALETTE = isDark ? {
+    sky:0x0c1712, fogColor:0x0c1712, ground:0x16281f, groundFar:0x0e1e18,
+    tileDim:0x4a3d29, tileLit:0xf0b94d, summitDim:0x3a2f1e, summitLit:0xf0b94d,
+    edgeDim:0x4a3d29, edgeLit:0xf0b94d, tree:0x1f4131, ambient:0x9fc2ab, sun:0xfff2d0, sunI:0.55, ambI:0.5
+  } : {
+    sky:0xcdeadb, fogColor:0xcdeadb, ground:0x8bc49f, groundFar:0xa9d9ba, tileDim:0xdcc99a, tileLit:0xe2a33d,
+    summitDim:0xdcc99a, summitLit:0xe2a33d, edgeDim:0xcdb27e, edgeLit:0xe2a33d, tree:0x5a9f78,
+    ambient:0xffffff, sun:0xfff6df, sunI:0.65, ambI:0.55
+  };
+
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(PALETTE.sky);
+  scene.fog = new THREE.Fog(PALETTE.fogColor, 27, 42);
+
+  var VIEW_W = 24, VIEW_H = 18; // fixed 4:3 ortho frustum, matches .stage aspect-ratio
+  var camera = new THREE.OrthographicCamera(-VIEW_W/2, VIEW_W/2, VIEW_H/2, -VIEW_H/2, -50, 50);
+  var CAM_TARGET0 = new THREE.Vector3(0, 1.8, 8);
+  camera.position.set(-13, 11, -13);
+  camera.lookAt(CAM_TARGET0);
+  var camOffsetDir = camera.position.clone().sub(CAM_TARGET0);
+  var camTarget = CAM_TARGET0.clone();
+  var camTargetGoal = CAM_TARGET0.clone();
+  var zoomLevel = 1, zoomGoal = 1;
+  function updateCameraGoal(nodeId, stepIndex){
+    var n = NODES[nodeId];
+    camTargetGoal.set(n.x*0.55, n.y+1.4, n.z+2.2);
+    zoomGoal = Math.max(0.56, 1 - 0.12*stepIndex);
+  }
+  function applyCamera(){
+    camera.position.copy(camTarget).add(camOffsetDir);
+    camera.lookAt(camTarget);
+    camera.left = -VIEW_W/2*zoomLevel;
+    camera.right = VIEW_W/2*zoomLevel;
+    camera.top = VIEW_H/2*zoomLevel;
+    camera.bottom = -VIEW_H/2*zoomLevel;
+    camera.updateProjectionMatrix();
+  }
+  function snapCameraTo(nodeId, stepIndex){
+    updateCameraGoal(nodeId, stepIndex);
+    camTarget.copy(camTargetGoal);
+    zoomLevel = zoomGoal;
+    applyCamera();
+  }
+  snapCameraTo("start", 0);
+
+  var renderer = new THREE.WebGLRenderer({ canvas:canvas, antialias:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+
+  function fitRenderer(){
+    var w = stageEl.clientWidth, h = stageEl.clientHeight;
+    if (w>0 && h>0) renderer.setSize(w, h, false);
+  }
+  fitRenderer();
+
+  scene.add(new THREE.AmbientLight(PALETTE.ambient, PALETTE.ambI));
+  var sun = new THREE.DirectionalLight(PALETTE.sun, PALETTE.sunI);
+  sun.position.set(8, 16, -6);
+  scene.add(sun);
+
+  // ground
+  var groundGeo = new THREE.PlaneGeometry(60, 60, 1, 1);
+  var groundMat = new THREE.MeshStandardMaterial({ color: PALETTE.ground, roughness:1 });
+  var ground = new THREE.Mesh(groundGeo, groundMat);
+  ground.rotation.x = -Math.PI/2;
+  ground.position.set(0, -0.05, 8);
+  scene.add(ground);
+
+  // decorative low-poly trees scattered beside the path
+  function addTree(x,z,scale){
+    var g = new THREE.Group();
+    var trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.11,0.5,6), new THREE.MeshStandardMaterial({color:0x6b4a2f, roughness:1}));
+    trunk.position.y = 0.25;
+    var leaves = new THREE.Mesh(new THREE.ConeGeometry(0.55,1.2,7), new THREE.MeshStandardMaterial({color:PALETTE.tree, roughness:1}));
+    leaves.position.y = 1.05;
+    g.add(trunk, leaves);
+    g.position.set(x, 0, z);
+    g.scale.setScalar(scale);
+    scene.add(g);
+  }
+  var treeSpots = [[-9,2,1],[9,1,1.1],[-9.5,9,0.9],[9.5,8,1.2],[-11,15,1],[11,14.5,0.9],[-4.5,17.5,0.8],[4.8,18,0.85]];
+  treeSpots.forEach(function(t){ addTree(t[0],t[1],t[2]); });
+
+  // ---- build node platforms ----
+  var nodeMeshes = {};
+  function buildNode(id){
+    var n = NODES[id];
+    var isSummit = n.kind === "summit";
+    var radius = isSummit ? 1.05 : 0.85;
+    var geo = new THREE.CylinderGeometry(radius, radius*1.05, 0.28, 22);
+    var mat = new THREE.MeshStandardMaterial({
+      color: isSummit ? PALETTE.summitDim : PALETTE.tileDim,
+      roughness:0.85
+    });
+    var mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(n.x, n.y, n.z);
+    scene.add(mesh);
+    nodeMeshes[id] = mesh;
+
+    if (isSummit){
+      var pole = new THREE.Mesh(new THREE.CylinderGeometry(0.035,0.035,1.3,6), new THREE.MeshStandardMaterial({color:0x8a8a8a}));
+      pole.position.set(n.x, n.y+0.8, n.z);
+      var flagMat = new THREE.MeshStandardMaterial({ color: PALETTE.summitLit, roughness:0.6 });
+      var flag = new THREE.Mesh(new THREE.BoxGeometry(0.46,0.28,0.045), flagMat);
+      flag.position.set(n.x+0.25, n.y+1.28, n.z);
+      flag.rotation.y = -0.55;
+      scene.add(pole, flag);
+    }
+  }
+  Object.keys(NODES).forEach(buildNode);
+
+  // ---- build edges (tubes) between question -> choice target ----
+  var edgeMeshes = {}; // key "from>to" -> mesh
+  var edgeCurves = {}; // key -> THREE.Curve
+  function buildEdge(fromId, toId){
+    var a = NODES[fromId], b = NODES[toId];
+    var key = fromId+">"+toId;
+    if (edgeMeshes[key]) return;
+    var mid = new THREE.Vector3((a.x+b.x)/2, Math.max(a.y,b.y)+1.0, (a.z+b.z)/2);
+    var curve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(a.x,a.y,a.z), mid, new THREE.Vector3(b.x,b.y,b.z)
+    ]);
+    var tubeGeo = new THREE.TubeGeometry(curve, 24, 0.11, 8, false);
+    var tubeMat = new THREE.MeshStandardMaterial({ color: PALETTE.edgeDim, roughness:0.7 });
+    var mesh = new THREE.Mesh(tubeGeo, tubeMat);
+    scene.add(mesh);
+    edgeMeshes[key] = mesh;
+    edgeCurves[key] = curve;
+  }
+  Object.keys(QUESTIONS).forEach(function(fromId){
+    QUESTIONS[fromId].choices.forEach(function(c){ buildEdge(fromId, c.to); });
+  });
+
+  // ---- character ("말") ----
+  var character = new THREE.Group();
+  (function buildCharacter(){
+    var body = new THREE.Mesh(new THREE.CylinderGeometry(0.24,0.3,0.5,14), new THREE.MeshStandardMaterial({color:0x2f6b4f, roughness:0.6}));
+    body.position.y = 0.5;
+    var head = new THREE.Mesh(new THREE.SphereGeometry(0.24,18,14), new THREE.MeshStandardMaterial({color:0xf4c08e, roughness:0.6}));
+    head.position.y = 0.92;
+    var hat = new THREE.Mesh(new THREE.ConeGeometry(0.27,0.24,14), new THREE.MeshStandardMaterial({color:0xc1841f, roughness:0.7}));
+    hat.position.y = 1.16;
+    var pack = new THREE.Mesh(new THREE.BoxGeometry(0.22,0.32,0.16), new THREE.MeshStandardMaterial({color:0xd64550, roughness:0.7}));
+    pack.position.set(0,0.55,-0.24);
+    var legL = new THREE.Mesh(new THREE.CylinderGeometry(0.07,0.07,0.28,8), new THREE.MeshStandardMaterial({color:0x4b5c51}));
+    legL.position.set(-0.11,0.14,0);
+    var legR = legL.clone(); legR.position.x = 0.11;
+    character.add(body, head, hat, pack, legL, legR);
+  })();
+  character.position.set(NODES.start.x, NODES.start.y+0.28, NODES.start.z);
+  scene.add(character);
+  var restY = NODES.start.y + 0.28;
+
+  function litColorFor(kind){ return kind === "summit" ? PALETTE.summitLit : PALETTE.tileLit; }
+
+  // ---------------------------------------------------------------
+  // Render / animation loop
+  // ---------------------------------------------------------------
+  var clock = new THREE.Clock();
+  var travel = null; // {curve, duration, elapsed, onDone}
+  var idlePhase = Math.random()*10;
+
+  function animate(){
+    requestAnimationFrame(animate);
+    var dt = clock.getDelta();
+    idlePhase += dt;
+
+    if (travel){
+      travel.elapsed += dt;
+      var t = Math.min(1, travel.elapsed / travel.duration);
+      var eased = t<0.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
+      var p = travel.curve.getPointAt(eased);
+      var hop = reduceMotion ? 0 : Math.sin(eased*Math.PI) * 0.55;
+      character.position.set(p.x, p.y + 0.28 + hop, p.z);
+      var tangent = travel.curve.getTangentAt(eased);
+      if (tangent.x*tangent.x + tangent.z*tangent.z > 0.0001){
+        var yaw = Math.atan2(tangent.x, tangent.z);
+        character.rotation.y = yaw;
+      }
+      var squash = reduceMotion ? 1 : 1 + Math.sin(eased*Math.PI)*0.12;
+      character.scale.set(1/squash*0.9+0.1, squash, 1/squash*0.9+0.1);
+      if (t >= 1){
+        var done = travel.onDone;
+        travel = null;
+        character.scale.set(1,1,1);
+        restY = character.position.y;
+        if (done) done();
+      }
+    } else {
+      var bob = reduceMotion ? 0 : Math.sin(idlePhase*2.4)*0.05;
+      character.position.y = restY + bob;
+    }
+
+    var smooth = reduceMotion ? 1 : Math.min(1, 1 - Math.pow(0.0006, dt));
+    camTarget.lerp(camTargetGoal, smooth);
+    zoomLevel += (zoomGoal - zoomLevel) * smooth;
+    applyCamera();
+
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(animate);
+
+  window.addEventListener("resize", fitRenderer);
+  if (window.ResizeObserver){
+    new ResizeObserver(fitRenderer).observe(stageEl);
+  }
+
+  function moveCharacterTo(fromId, toId, callback){
+    var key = fromId+">"+toId;
+    var curve = edgeCurves[key];
+    if (!curve){
+      // fallback: straight line
+      var a = NODES[fromId], b = NODES[toId];
+      curve = new THREE.CatmullRomCurve3([new THREE.Vector3(a.x,a.y,a.z), new THREE.Vector3(b.x,b.y,b.z)]);
+    }
+    travel = { curve: curve, duration: reduceMotion ? 0.15 : 1.1, elapsed: 0, onDone: callback };
+  }
+
+  function lightUpPath(fromId, toId){
+    var key = fromId+">"+toId;
+    if (edgeMeshes[key]) edgeMeshes[key].material.color.set(PALETTE.edgeLit);
+    if (nodeMeshes[toId]) nodeMeshes[toId].material.color.set(litColorFor(NODES[toId].kind));
+    if (nodeMeshes[fromId]) nodeMeshes[fromId].material.color.set(litColorFor(NODES[fromId].kind));
+  }
+
+  // ---------------------------------------------------------------
+  // Game flow
+  // ---------------------------------------------------------------
+  function renderProgress(){
+    progressRow.innerHTML = "";
+    for (var i=0;i<TOTAL_STEPS;i++){
+      var d = document.createElement("span");
+      d.className = "dot" + (i<state.step ? " done" : (i===state.step ? " current":""));
+      progressRow.appendChild(d);
+    }
+    var goal = document.createElement("span");
+    goal.className = "dot goal";
+    progressRow.appendChild(goal);
+  }
+
+  function renderQuestion(){
+    renderProgress();
+    updateCameraGoal(state.currentNode, state.step);
+    var q = QUESTIONS[state.currentNode];
+    qText.textContent = q.text;
+    choicesEl.innerHTML = "";
+    q.choices.forEach(function(choice, idx){
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "choice";
+      btn.innerHTML = '<span class="choice__mark">' + (idx===0 ? "A" : "B") + '</span><span>' + choice.label + '</span>';
+      btn.addEventListener("click", function(){ selectChoice(choice); });
+      choicesEl.appendChild(btn);
+    });
+  }
+
+  function setChoicesDisabled(disabled){
+    Array.prototype.forEach.call(choicesEl.querySelectorAll(".choice"), function(b){ b.disabled = disabled; });
+  }
+
+  function selectChoice(choice){
+    setChoicesDisabled(true);
+    var fromId = state.currentNode, toId = choice.to;
+    lightUpPath(fromId, toId);
+    state.path.push({ from: fromId, to: toId, label: choice.label });
+    moveCharacterTo(fromId, toId, function(){
+      state.currentNode = toId;
+      if (NODES[toId].kind === "summit"){
+        showResult(toId);
+      } else {
+        state.step += 1;
+        renderQuestion();
+      }
+    });
+  }
+
+  function renderProgressComplete(){
+    progressRow.innerHTML = "";
+    for (var i=0;i<TOTAL_STEPS;i++){
+      var d = document.createElement("span");
+      d.className = "dot done";
+      progressRow.appendChild(d);
+    }
+    var goal = document.createElement("span");
+    goal.className = "dot goal done";
+    progressRow.appendChild(goal);
+  }
+
+  function showResult(outcomeId){
+    renderProgressComplete();
+    updateCameraGoal(outcomeId, TOTAL_STEPS);
+    panelQuestion.hidden = true;
+    panelResult.hidden = false;
+    stageHint.textContent = "정상 도착! 여기가 나의 AI 진로예요";
+    var data = RESULTS[outcomeId];
+    document.getElementById("result-icon").innerHTML = ICONS[data.icon];
+    document.getElementById("result-title").textContent = data.title;
+    document.getElementById("result-tagline").textContent = data.tagline;
+    document.getElementById("result-desc").textContent = data.desc;
+
+    var meaningfulPath = state.path.filter(function(p){ return p.from !== "start"; });
+    document.getElementById("result-path").textContent =
+      "선택한 길: " + meaningfulPath.map(function(p){ return p.label; }).join("  →  ");
+
+    var jobsEl = document.getElementById("chips-jobs"); jobsEl.innerHTML = "";
+    data.jobs.forEach(function(j){ var c=document.createElement("span"); c.className="chip"; c.textContent=j; jobsEl.appendChild(c); });
+    var majorsEl = document.getElementById("chips-majors"); majorsEl.innerHTML = "";
+    data.majors.forEach(function(m){ var c=document.createElement("span"); c.className="chip"; c.textContent=m; majorsEl.appendChild(c); });
+  }
+
+  function resetSceneColors(){
+    Object.keys(nodeMeshes).forEach(function(id){
+      nodeMeshes[id].material.color.set(NODES[id].kind === "summit" ? PALETTE.summitDim : PALETTE.tileDim);
+    });
+    Object.keys(edgeMeshes).forEach(function(key){
+      edgeMeshes[key].material.color.set(PALETTE.edgeDim);
+    });
+  }
+
+  function restart(){
+    state = { step:0, currentNode:"start", path:[] };
+    resetSceneColors();
+    character.position.set(NODES.start.x, NODES.start.y+0.28, NODES.start.z);
+    character.rotation.y = 0;
+    restY = NODES.start.y + 0.28;
+    snapCameraTo("start", 0);
+    panelResult.hidden = true;
+    panelQuestion.hidden = false;
+    stageHint.textContent = "캐릭터를 따라 산길을 올라가 보세요";
+    screenStart.hidden = false;
+    screenPlay.hidden = true;
+  }
+
+  document.getElementById("btn-start").addEventListener("click", function(){
+    screenStart.hidden = true;
+    screenPlay.hidden = false;
+    fitRenderer();
+    renderQuestion();
+  });
+  document.getElementById("btn-restart").addEventListener("click", restart);
+
+  try{
+    if (window.claude && window.claude.hot){
+      window.claude.hot.snapshot(function(){ return { state: state }; });
+    }
+  }catch(e){}
+})();
+</script>
+
+</body>
+</html>
