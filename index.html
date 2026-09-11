@@ -19,10 +19,6 @@
     --accent-warm:#e2a33d;
     --accent-warm-strong:#c1841f;
     --accent-pop:#d64550;
-    --hill-1:#bfe0cb;
-    --hill-2:#9ccdae;
-    --hill-3:#6fb389;
-    --sky-sun:#ffd97a;
     --chip-bg:#eef6f0;
     --chip-ink:#20422f;
     --shadow-soft:0 18px 40px rgba(28,43,34,.14);
@@ -32,7 +28,6 @@
       --bg-top:#0d1a14; --bg-bot:#0a130f; --surface:#142620; --surface-2:#0e1e18;
       --ink:#e9f3ec; --ink-soft:#a9bfb1; --line:#243d31;
       --accent:#6fcf97; --accent-strong:#8ee3ae; --accent-warm:#f0b94d; --accent-warm-strong:#ffce6e; --accent-pop:#ff7a83;
-      --hill-1:#173226; --hill-2:#1f4131; --hill-3:#265239; --sky-sun:#f4c86b;
       --chip-bg:#1b3226; --chip-ink:#bfe7cd;
       --shadow-soft:0 18px 40px rgba(0,0,0,.45);
     }
@@ -41,7 +36,6 @@
     --bg-top:#0d1a14; --bg-bot:#0a130f; --surface:#142620; --surface-2:#0e1e18;
     --ink:#e9f3ec; --ink-soft:#a9bfb1; --line:#243d31;
     --accent:#6fcf97; --accent-strong:#8ee3ae; --accent-warm:#f0b94d; --accent-warm-strong:#ffce6e; --accent-pop:#ff7a83;
-    --hill-1:#173226; --hill-2:#1f4131; --hill-3:#265239; --sky-sun:#f4c86b;
     --chip-bg:#1b3226; --chip-ink:#bfe7cd;
     --shadow-soft:0 18px 40px rgba(0,0,0,.45);
   }
@@ -55,17 +49,17 @@
     padding:24px 16px 48px;
     min-height:100vh;
   }
-  .wrap{max-width:600px;margin:0 auto;}
+  .wrap{max-width:620px;margin:0 auto;}
   .brand{display:flex; align-items:baseline; justify-content:center; gap:10px; margin-bottom:4px;}
   .brand__mark{font-family:"Do Hyeon",sans-serif; font-size:15px; letter-spacing:.08em; color:var(--accent-warm-strong);}
   h1.title{
     font-family:"Do Hyeon",sans-serif; text-align:center;
     font-size:clamp(28px,7vw,38px); margin:0 0 8px; color:var(--accent-strong); text-wrap:balance;
   }
-  p.tagline{text-align:center; color:var(--ink-soft); margin:0 auto 26px; max-width:38ch; line-height:1.6; font-size:15px;}
+  p.tagline{text-align:center; color:var(--ink-soft); margin:0 auto 26px; max-width:40ch; line-height:1.6; font-size:15px;}
 
   .start-card{background:var(--surface); border-radius:26px; box-shadow:var(--shadow-soft); padding:28px 22px 26px; text-align:center;}
-  .start-illustration{width:100%;max-width:320px;margin:0 auto 18px;display:block;}
+  .start-illustration{width:100%;max-width:330px;margin:0 auto 18px;display:block;}
   .btn-primary{
     font-family:"Do Hyeon",sans-serif; font-size:19px; letter-spacing:.02em; color:#ffffff;
     background:linear-gradient(180deg,var(--accent),var(--accent-strong));
@@ -78,54 +72,56 @@
 
   [hidden]{display:none!important;}
 
-  .progress-row{display:flex; justify-content:center; align-items:center; gap:4px; margin:6px 0 14px; flex-wrap:wrap;}
+  .progress-row{display:flex; justify-content:center; align-items:center; gap:3px; margin:6px 0 14px; flex-wrap:wrap;}
   .stage-chip{
-    font-family:"Do Hyeon",sans-serif; font-size:12px; letter-spacing:.02em; padding:5px 11px; border-radius:999px;
-    background:var(--surface-2); color:var(--ink-soft); border:1.5px solid var(--line); transition:all .2s ease;
+    font-family:"Do Hyeon",sans-serif; font-size:11px; letter-spacing:0; padding:5px 9px; border-radius:999px;
+    background:var(--surface-2); color:var(--ink-soft); border:1.5px solid var(--line); transition:all .2s ease; white-space:nowrap;
   }
   .stage-chip.done{background:var(--accent); color:#fff; border-color:var(--accent);}
-  .stage-chip.current{background:var(--accent-warm); color:#3a2c05; border-color:var(--accent-warm-strong); transform:scale(1.08);}
+  .stage-chip.current{background:var(--accent-warm); color:#3a2c05; border-color:var(--accent-warm-strong); transform:scale(1.1); font-weight:700;}
   .stage-chip.goal{background:var(--accent-pop); color:#fff; border-color:var(--accent-pop);}
-  .stage-arrow{color:var(--ink-soft); font-size:12px;}
+  .stage-arrow{color:var(--ink-soft); font-size:11px; opacity:.55;}
 
   .stage{
     position:relative; border-radius:26px; overflow:hidden; box-shadow:var(--shadow-soft);
     border:1px solid var(--line); background:var(--surface-2);
     aspect-ratio:4/3;
   }
+  /* Narrow screens get a taller stage so the speech bubble never buries the character. */
+  @media (max-width:620px){ .stage{ aspect-ratio:1/1; } }
   .stage canvas{display:block; width:100%; height:100%;}
 
   .hud-question{
     position:absolute; left:0; top:0; z-index:3;
-    width:min(78%, 300px);
-    background:rgba(16,30,24,.86); backdrop-filter:blur(3px);
-    border-radius:16px; padding:12px 14px 11px; color:#fff;
-    box-shadow:0 10px 22px rgba(0,0,0,.32);
+    width:min(86%, 360px);
+    background:rgba(10,22,17,.93);
+    border-radius:18px; padding:13px 15px 12px; color:#fff;
+    box-shadow:0 12px 28px rgba(0,0,0,.42), 0 0 0 2px rgba(255,255,255,.14) inset;
     will-change:transform;
   }
   .hud-question::after{
-    content:""; position:absolute; left:50%; bottom:-7px; transform:translateX(-50%);
-    width:14px; height:14px; background:rgba(16,30,24,.86);
+    content:""; position:absolute; left:50%; bottom:-8px; transform:translateX(-50%);
+    width:16px; height:16px; background:rgba(10,22,17,.93);
     clip-path:polygon(0 0,100% 0,50% 100%);
   }
   .hud-stage-tag{
-    display:inline-block; font-family:"Do Hyeon",sans-serif; font-size:10.5px; letter-spacing:.06em;
-    color:#2c1f04; background:var(--accent-warm); padding:3px 9px; border-radius:999px; margin-bottom:7px;
+    display:inline-block; font-family:"Do Hyeon",sans-serif; font-size:11.5px; letter-spacing:.06em;
+    color:#2c1f04; background:var(--accent-warm); padding:3px 10px; border-radius:999px; margin-bottom:8px;
   }
-  .hud-q-text{font-size:13.5px; font-weight:700; line-height:1.45; margin:0 0 9px; color:#fff;}
-  .hud-choices{display:grid; gap:6px;}
+  .hud-q-text{font-size:15px; font-weight:700; line-height:1.45; margin:0 0 10px; color:#fff; letter-spacing:-.01em;}
+  .hud-choices{display:grid; gap:7px;}
   .hud-choice{
-    display:flex; align-items:center; gap:9px; text-align:left;
-    background:rgba(255,255,255,.1); border:1.5px solid rgba(255,255,255,.22); border-radius:11px; padding:9px 11px;
-    font-family:"Noto Sans KR",sans-serif; font-size:12.5px; font-weight:500; color:#fff;
+    display:flex; align-items:center; gap:10px; text-align:left;
+    background:rgba(255,255,255,.13); border:1.5px solid rgba(255,255,255,.28); border-radius:12px; padding:10px 12px;
+    font-family:"Noto Sans KR",sans-serif; font-size:13.5px; font-weight:500; line-height:1.4; color:#fff;
     cursor:pointer; transition:background .15s ease, transform .1s ease;
   }
-  .hud-choice:hover{background:rgba(255,255,255,.2);}
+  .hud-choice:hover{background:rgba(255,255,255,.24);}
   .hud-choice:active{transform:scale(.98);}
   .hud-choice:disabled{opacity:.45; cursor:default;}
   .hud-choice__mark{
-    flex:0 0 auto; width:20px;height:20px;border-radius:50%; display:flex;align-items:center;justify-content:center;
-    background:rgba(255,255,255,.16); font-family:"Do Hyeon",sans-serif; font-size:11px; color:#fff;
+    flex:0 0 auto; width:22px;height:22px;border-radius:50%; display:flex;align-items:center;justify-content:center;
+    background:var(--accent-warm); color:#2c1f04; font-family:"Do Hyeon",sans-serif; font-size:12px;
   }
 
   .guide-toggle{
@@ -142,24 +138,37 @@
   }
   .result-icon svg{width:32px;height:32px;}
   .result-eyebrow{font-size:12.5px; letter-spacing:.08em; color:var(--accent-warm-strong); font-weight:700; margin-bottom:6px;}
-  .result-title{font-family:"Do Hyeon",sans-serif; font-size:26px; color:var(--accent-strong); margin:0 0 6px; text-wrap:balance;}
+  .result-title{font-family:"Do Hyeon",sans-serif; font-size:27px; color:var(--accent-strong); margin:0 0 6px; text-wrap:balance;}
   .result-tagline{color:var(--ink-soft); font-size:14.5px; margin:0 0 16px;}
-  .result-desc{font-size:14.5px; line-height:1.7; margin:0 0 14px; text-align:left;}
-  .roadmap-row{display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:4px; margin:0 0 18px;}
-  .roadmap-chip{display:flex; flex-direction:column; align-items:center; gap:2px; background:var(--chip-bg); border-radius:12px; padding:8px 10px; min-width:62px;}
-  .roadmap-chip .rc-label{font-family:"Do Hyeon",sans-serif; font-size:10px; color:var(--accent-warm-strong); letter-spacing:.04em;}
-  .roadmap-chip .rc-value{font-size:10.5px; color:var(--chip-ink); line-height:1.3; text-align:center; max-width:78px;}
-  .roadmap-arrow{color:var(--ink-soft); font-size:12px; padding:0 1px;}
-  .roadmap-chip.final{background:var(--accent);}
-  .roadmap-chip.final .rc-label, .roadmap-chip.final .rc-value{color:#fff;}
+  .result-desc{font-size:14.5px; line-height:1.7; margin:0 0 18px; text-align:left;}
+
+  .roadmap-list{display:grid; gap:5px; margin:0 0 18px; text-align:left;}
+  .roadmap-item{display:flex; align-items:center; gap:9px; background:var(--surface-2); border-radius:11px; padding:8px 11px;}
+  .roadmap-item .rm-stage{
+    flex:0 0 68px; font-family:"Do Hyeon",sans-serif; font-size:11.5px; text-align:center;
+    color:#2c1f04; background:var(--accent-warm); border-radius:999px; padding:3px 0;
+  }
+  .roadmap-item .rm-text{font-size:13.5px; font-weight:500; color:var(--ink); line-height:1.35;}
+  .roadmap-item.final{background:var(--accent);}
+  .roadmap-item.final .rm-stage{background:rgba(255,255,255,.9); color:var(--accent-strong);}
+  .roadmap-item.final .rm-text{color:#fff; font-weight:700;}
+
   .chip-group{margin-bottom:16px; text-align:left;}
   .chip-group h3{font-size:12px; letter-spacing:.06em; color:var(--ink-soft); margin:0 0 8px; font-weight:700;}
   .chips{display:flex; flex-wrap:wrap; gap:8px;}
   .chip{background:var(--chip-bg); color:var(--chip-ink); font-size:13.5px; font-weight:500; padding:7px 13px; border-radius:999px;}
   .talk-note{
     background:var(--surface-2); border-left:3px solid var(--accent-warm); border-radius:10px; padding:12px 14px;
-    font-size:13.5px; line-height:1.6; text-align:left; margin-bottom:20px; color:var(--ink);
+    font-size:13.5px; line-height:1.6; text-align:left; margin-bottom:18px; color:var(--ink);
   }
+  .name-row{display:flex; align-items:center; gap:9px; justify-content:center; margin-bottom:16px; flex-wrap:wrap;}
+  .name-row label{font-size:13px; color:var(--ink-soft);}
+  .name-row input{
+    font-family:"Noto Sans KR",sans-serif; font-size:14.5px; color:var(--ink); background:var(--surface-2);
+    border:1.5px solid var(--line); border-radius:999px; padding:9px 16px; width:150px; text-align:center;
+  }
+  .name-row input:focus{outline:none; border-color:var(--accent);}
+
   .btn-row{display:flex; justify-content:center; gap:10px; flex-wrap:wrap;}
   .btn-secondary{
     font-family:"Do Hyeon",sans-serif; font-size:15px; letter-spacing:.02em; color:var(--accent-strong);
@@ -167,8 +176,77 @@
     transition:transform .12s ease;
   }
   .btn-secondary:active{transform:translateY(2px);}
+  .btn-secondary:disabled{opacity:.5; cursor:default;}
 
-  @media (max-width:400px){ .hud-question{width:min(84%, 260px);} .hud-q-text{font-size:12.5px;} }
+  @media (max-width:620px){
+    .progress-row{gap:2px;}
+    .stage-chip{font-size:10px; padding:4px 7px; border-width:1.2px;}
+    .stage-arrow{font-size:9px;}
+    .hud-question{width:min(94%, 380px); padding:11px 12px 10px;}
+    .hud-q-text{font-size:14px; margin-bottom:9px;}
+    .hud-choice{font-size:13px; padding:9px 10px; gap:8px;}
+    .hud-choices{gap:6px;}
+  }
+  @media (max-width:400px){
+    .hud-q-text{font-size:13px;}
+    .hud-choice{font-size:12px; padding:8px 9px;}
+    .roadmap-item .rm-stage{flex:0 0 60px; font-size:10.5px;}
+    .roadmap-item .rm-text{font-size:12.5px;}
+  }
+
+  /* ---------- offscreen 9:16 photo card (1080 x 1920) ---------- */
+  .pc-stage{position:absolute; left:-99999px; top:0; width:1080px; height:1920px; pointer-events:none;}
+  .pc{
+    width:1080px; height:1920px; padding:56px 64px 48px; display:flex; flex-direction:column;
+    background:linear-gradient(165deg,#f4fbf6 0%,#e4f4ea 46%,#d5eee0 100%);
+    font-family:"Noto Sans KR",sans-serif; color:#17291f; position:relative; overflow:hidden;
+  }
+  .pc-blob{position:absolute; border-radius:50%; opacity:.5;}
+  .pc-blob.b1{width:520px;height:520px; right:-180px; top:-160px; background:#ffe0a8;}
+  .pc-blob.b2{width:420px;height:420px; left:-170px; bottom:180px; background:#bfe6ce;}
+  .pc-inner{position:relative; z-index:2; display:flex; flex-direction:column; height:100%;}
+  .pc-top{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:22px;}
+  .pc-brand{font-family:"Do Hyeon",sans-serif; font-size:30px; letter-spacing:.06em; color:#c1841f;}
+  .pc-date{font-size:25px; color:#6d8478;}
+  .pc-scene{
+    width:100%; height:540px; border-radius:36px; overflow:hidden; background:#cfeadd;
+    box-shadow:0 16px 34px rgba(23,41,31,.16); margin-bottom:24px; position:relative;
+  }
+  .pc-scene img{width:100%; height:100%; object-fit:cover; display:block;}
+  .pc-name{font-family:"Do Hyeon",sans-serif; font-size:38px; color:#3f5a4c; text-align:center; margin-bottom:10px;}
+  .pc-head{display:flex; align-items:center; gap:22px; margin-bottom:16px;}
+  .pc-badge{
+    flex:0 0 auto; width:114px; height:114px; border-radius:50%; background:#ffffff;
+    display:flex; align-items:center; justify-content:center; color:#204e3a;
+    box-shadow:0 10px 24px rgba(23,41,31,.14);
+  }
+  .pc-badge svg{width:60px; height:60px;}
+  .pc-headtext{flex:1 1 auto; min-width:0;}
+  .pc-eyebrow{font-size:24px; letter-spacing:.12em; color:#c1841f; font-weight:700; margin-bottom:4px;}
+  .pc-title{font-family:"Do Hyeon",sans-serif; font-size:62px; line-height:1.12; color:#1b4e37; margin:0;}
+  .pc-tagline{font-size:30px; color:#53695d; margin:0 0 24px; line-height:1.45;}
+  .pc-rm-label{font-family:"Do Hyeon",sans-serif; font-size:25px; letter-spacing:.1em; color:#8fa398; margin-bottom:10px;}
+  .pc-roadmap{display:flex; flex-direction:column; gap:7px; margin-bottom:24px;}
+  .pc-rm-row{display:flex; align-items:center; gap:16px; background:rgba(255,255,255,.82); border-radius:16px; padding:11px 18px;}
+  .pc-rm-stage{
+    flex:0 0 164px; font-family:"Do Hyeon",sans-serif; font-size:24px; text-align:center;
+    color:#2c1f04; background:#f2c877; border-radius:999px; padding:6px 0;
+  }
+  .pc-rm-text{font-size:30px; font-weight:500; color:#23372c; line-height:1.25;}
+  .pc-rm-row.final{background:#2f6b4f;}
+  .pc-rm-row.final .pc-rm-stage{background:#ffffff; color:#1b4e37;}
+  .pc-rm-row.final .pc-rm-text{color:#ffffff; font-weight:700;}
+  .pc-cols{display:flex; gap:22px; margin-bottom:18px;}
+  .pc-col{flex:1 1 0; min-width:0;}
+  .pc-col-label{font-family:"Do Hyeon",sans-serif; font-size:23px; letter-spacing:.08em; color:#8fa398; margin-bottom:9px;}
+  .pc-chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .pc-chip{background:#ffffff; color:#20422f; font-size:25px; font-weight:500; padding:8px 17px; border-radius:999px;}
+  .pc-note{
+    background:rgba(255,255,255,.82); border-left:8px solid #f2c877; border-radius:18px;
+    padding:20px 26px; font-size:27px; line-height:1.5; color:#23372c;
+  }
+  .pc-note strong{color:#1b4e37;}
+  .pc-foot{margin-top:auto; padding-top:20px; text-align:center; font-size:23px; color:#8fa398; letter-spacing:.04em;}
 </style>
 </head>
 <body>
@@ -177,17 +255,22 @@
 <div class="wrap">
   <div class="brand"><span class="brand__mark">AI 진로멘토링 체험</span></div>
   <h1 class="title">AI 진로 트레일</h1>
-  <p class="tagline">네 번의 갈림길을 지나 나에게 어울리는 AI 분야 봉우리에 도착하는 여정</p>
+  <p class="tagline">중학교부터 취업까지, 여섯 번의 갈림길을 지나 나에게 어울리는 AI 분야 봉우리에 도착하는 여정</p>
 
   <section id="screen-start" class="start-card">
-    <svg class="start-illustration" viewBox="0 0 320 140" aria-hidden="true">
-      <circle cx="252" cy="34" r="20" fill="var(--sky-sun)"/>
-      <path fill="var(--hill-1)" d="M0,110 Q60,70 120,100 T240,90 T320,105 L320,140 L0,140 Z"/>
-      <path fill="var(--hill-2)" d="M0,120 Q80,90 160,115 T320,110 L320,140 L0,140 Z"/>
-      <path fill="var(--hill-3)" d="M0,132 Q100,112 200,130 T320,120 L320,140 L0,140 Z"/>
+    <svg class="start-illustration" viewBox="0 0 330 150" aria-hidden="true">
+      <circle cx="264" cy="32" r="19" fill="#ffd97a"/>
+      <ellipse cx="62" cy="38" rx="26" ry="13" fill="#ffffff" opacity=".85"/>
+      <ellipse cx="80" cy="34" rx="18" ry="11" fill="#ffffff" opacity=".85"/>
+      <path fill="#bfe0cb" d="M0,116 Q62,74 124,104 T248,94 T330,110 L330,150 L0,150 Z"/>
+      <path fill="#9ccdae" d="M0,126 Q82,94 164,120 T330,114 L330,150 L0,150 Z"/>
+      <path fill="#6fb389" d="M0,138 Q104,116 206,134 T330,124 L330,150 L0,150 Z"/>
+      <circle cx="96" cy="122" r="5" fill="#f2a0b4"/>
+      <circle cx="228" cy="128" r="5" fill="#ffd97a"/>
+      <circle cx="160" cy="133" r="4" fill="#c39bea"/>
     </svg>
     <button class="btn-primary" id="btn-start" type="button">여행 시작하기</button>
-    <p class="start-meta">4개의 갈림길 · 약 2~3분 소요</p>
+    <p class="start-meta">6개의 갈림길 · 약 3~4분 소요</p>
   </section>
 
   <section id="screen-play" hidden>
@@ -208,12 +291,16 @@
       <h2 class="result-title" id="result-title"></h2>
       <p class="result-tagline" id="result-tagline"></p>
       <p class="result-desc" id="result-desc"></p>
-      <div class="roadmap-row" id="roadmap-row"></div>
+      <div class="roadmap-list" id="roadmap-list"></div>
       <div class="chip-group"><h3>이런 직업으로 이어져요</h3><div class="chips" id="chips-jobs"></div></div>
       <div class="chip-group"><h3>관련 학과 예시</h3><div class="chips" id="chips-majors"></div></div>
       <div class="talk-note">전문가 선생님께 <strong>"이 분야는 실제로 어떤 일을 하나요?"</strong> 라고 직접 물어보세요. 학과 이름에 "AI"가 없어도 이 분야로 갈 수 있어요.</div>
+      <div class="name-row">
+        <label for="student-name">카드에 넣을 이름</label>
+        <input id="student-name" type="text" maxlength="12" placeholder="예) 김하늘">
+      </div>
       <div class="btn-row">
-        <button class="btn-secondary" id="btn-save-image" type="button">이미지로 저장</button>
+        <button class="btn-secondary" id="btn-save-image" type="button">포토카드 저장</button>
         <button class="btn-primary" id="btn-restart" type="button">다음 친구 도전하기</button>
       </div>
     </div>
@@ -223,13 +310,50 @@
   </section>
 </div>
 
+<div class="pc-stage" aria-hidden="true">
+  <div class="pc" id="photo-card">
+    <div class="pc-blob b1"></div>
+    <div class="pc-blob b2"></div>
+    <div class="pc-inner">
+      <div class="pc-top">
+        <span class="pc-brand">AI 진로멘토링 체험</span>
+        <span class="pc-date" id="pc-date"></span>
+      </div>
+      <div class="pc-scene"><img id="pc-scene-img" alt=""></div>
+      <div class="pc-name" id="pc-name"></div>
+      <div class="pc-head">
+        <div class="pc-badge" id="pc-badge"></div>
+        <div class="pc-headtext">
+          <div class="pc-eyebrow">나의 AI 진로 유형</div>
+          <h2 class="pc-title" id="pc-title"></h2>
+        </div>
+      </div>
+      <p class="pc-tagline" id="pc-tagline"></p>
+      <div class="pc-rm-label">내가 걸어온 길</div>
+      <div class="pc-roadmap" id="pc-roadmap"></div>
+      <div class="pc-cols">
+        <div class="pc-col">
+          <div class="pc-col-label">이어지는 직업</div>
+          <div class="pc-chips" id="pc-jobs"></div>
+        </div>
+        <div class="pc-col">
+          <div class="pc-col-label">관련 학과</div>
+          <div class="pc-chips" id="pc-majors"></div>
+        </div>
+      </div>
+      <div class="pc-note">전문가 선생님께 물어보세요 — <strong>"이 분야는 실제로 어떤 일을 하나요?"</strong> 학과 이름에 "AI"가 없어도 이 분야로 갈 수 있어요.</div>
+      <div class="pc-foot">2026 청소년 AI 진로멘토링 · AI 진로 트레일</div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 (function(){
-  // ---------------------------------------------------------------
-  // Content: icons, question graph, results
-  // ---------------------------------------------------------------
+  // =================================================================
+  // 1. CONTENT
+  // =================================================================
   var ICONS = {
     data: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-7"/></svg>',
     lang: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-9.4 8.3 8.5 8.5 0 0 1-3.8-1L3 20l1.2-4.8A8.38 8.38 0 0 1 3 11.5 8.5 8.5 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg>',
@@ -238,84 +362,160 @@
     hands: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1.1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.4 1Z"/></svg>'
   };
 
-  // Node graph. Positions are in Three.js world units (x lateral, y height, z depth up the mountain).
+  // 5 lanes, left (기술/분석) to right (표현/소통).
+  var LANE_X = [-8, -4, 0, 4, 8];
+  var LEVEL_Z = [0, 4.2, 8.4, 12.6, 16.8, 21, 25.4];
+  var LEVEL_Y = [0, 0.45, 0.95, 1.45, 1.95, 2.45, 3.1];
+  // Pastel platform colour per level, so the tech-tree reads as colourful.
+  var LEVEL_TINT = [0xf6d6a8, 0xf3c6d8, 0xd9c6f2, 0xbdd8f5, 0xbfeeda, 0xe6f0a8, 0xffd190];
+  var LANE_COLOR = [0xf08a6a, 0x5cb8e8, 0x9b7fe0, 0x3fbf94, 0xf2a3c4];
+
+  function N(lane, level, kind){
+    return { x: LANE_X[lane], y: LEVEL_Y[level], z: LEVEL_Z[level], lane: lane, level: level, kind: kind };
+  }
   var NODES = {
-    start:            { x: 0,    y: 0,   z: 0,    kind: "gate" },
-    trailhead:        { x: 0,    y: 0.3, z: 3.2,  kind: "gate" },
-    logic:            { x: -3.2, y: 0.7, z: 7,    kind: "fork" },
-    people:           { x: 3.2,  y: 0.7, z: 7,    kind: "fork" },
-    logic_hands:      { x: -5.4, y: 1.3, z: 11.3, kind: "fork" },
-    logic_data:       { x: -1.4, y: 1.3, z: 11.3, kind: "fork" },
-    people_creative:  { x: 1.4,  y: 1.3, z: 11.3, kind: "fork" },
-    people_talk:      { x: 5.4,  y: 1.3, z: 11.3, kind: "fork" },
-    hands:    { x: -7,   y: 2.1, z: 15.6, kind: "summit" },
-    data:     { x: -3.3, y: 2.1, z: 15.6, kind: "summit" },
-    ethics:   { x: 0,    y: 2.1, z: 15.6, kind: "summit" },
-    lang:     { x: 3.3,  y: 2.1, z: 15.6, kind: "summit" },
-    creative: { x: 7,    y: 2.1, z: 15.6, kind: "summit" }
+    start:      N(2, 0, "gate"),
+    logic:      N(1, 1, "fork"),  people:     N(3, 1, "fork"),
+    hs_sci:     N(0, 2, "fork"),  hs_data:    N(1, 2, "fork"),
+    hs_art:     N(3, 2, "fork"),  hs_lang:    N(4, 2, "fork"),
+    uni_eng:    N(0, 3, "fork"),  uni_stat:   N(1, 3, "fork"),
+    uni_ai:     N(2, 3, "fork"),  uni_design: N(3, 3, "fork"),
+    uni_lang:   N(4, 3, "fork"),
+    act_build:  N(0, 4, "fork"),  act_data:   N(1, 4, "fork"),
+    act_trust:  N(2, 4, "fork"),  act_make:   N(3, 4, "fork"),
+    act_talk:   N(4, 4, "fork"),
+    job_build:  N(0, 5, "fork"),  job_data:   N(1, 5, "fork"),
+    job_trust:  N(2, 5, "fork"),  job_make:   N(3, 5, "fork"),
+    job_talk:   N(4, 5, "fork"),
+    hands:      N(0, 6, "summit"), data:     N(1, 6, "summit"),
+    ethics:     N(2, 6, "summit"), lang:     N(3, 6, "summit"),
+    creative:   N(4, 6, "summit")
   };
 
-  // Questions asked while standing at a given node. Each choice names the node it leads to.
-  // The 4 steps map to a real career tech-tree: 중학교 → 고등학교 → 대학교 → 취업.
+  var STAGE_LABELS = ["중학교","고등학교","선택과목","대학 전공","대학 활동","취업"];
+  // Shorter set for the progress strip, so all seven chips fit on a phone.
+  var STAGE_CHIPS  = ["중학교","고등학교","선택과목","전공","활동","취업"];
+  var TOTAL_STEPS = 6;
+
+  // Every choice carries a full label (shown in the 3D speech bubble) and a
+  // short summary (used on the roadmap and the photo card, for legibility).
   var QUESTIONS = {
-    start: { text:"평소에 AI(인공지능)를 사용해 본 적 있나요?", choices:[
-      { label:"네, 챗봇이나 이미지 생성 AI를 써봤어요", to:"trailhead" },
-      { label:"아니요, 아직 잘 몰라요", to:"trailhead" }
+    start: { text:"중학교 수업 시간, 어떤 순간에 가장 눈이 반짝였나요?", choices:[
+      { label:"직접 만들고 실험해서 왜 그런지 확인했을 때", short:"만들고 실험하기", to:"logic" },
+      { label:"친구들 앞에서 내 생각이나 작품을 보여줬을 때", short:"표현하고 나누기", to:"people" }
     ]},
-    trailhead: { text:"고등학교에서 어떤 과목에 더 끌릴 것 같나요?", choices:[
-      { label:"수학·과학처럼 데이터와 근거로 답을 찾는 과목", to:"logic" },
-      { label:"국어·사회처럼 사람과 이야기를 다루는 과목", to:"people" }
+
+    logic: { text:"고등학교에 가면 어떤 동아리에 먼저 가입할까요?", choices:[
+      { label:"로봇·코딩 동아리 — 움직이는 걸 직접 만들고 싶어요", short:"로봇·코딩 동아리", to:"hs_sci" },
+      { label:"과학탐구 동아리 — 자료를 모아 답을 찾는 게 재밌어요", short:"과학탐구 동아리", to:"hs_data" }
     ]},
-    logic: { text:"대학에 진학한다면 어떤 공부가 더 끌리나요?", choices:[
-      { label:"직접 만들고 다루는 공학·기술 계열", to:"logic_hands" },
-      { label:"데이터를 분석하고 예측하는 통계·데이터 계열", to:"logic_data" }
+    people: { text:"고등학교에 가면 어떤 동아리에 먼저 가입할까요?", choices:[
+      { label:"영상·디자인 동아리 — 머릿속 장면을 보이게 만들고 싶어요", short:"영상·디자인 동아리", to:"hs_art" },
+      { label:"토론·방송 동아리 — 말과 글로 사람을 움직이고 싶어요", short:"토론·방송 동아리", to:"hs_lang" }
     ]},
-    people: { text:"대학에 진학한다면 어떤 공부가 더 끌리나요?", choices:[
-      { label:"이미지나 이야기를 만드는 디자인·콘텐츠 계열", to:"people_creative" },
-      { label:"언어와 사람의 마음을 다루는 언어·인문 계열", to:"people_talk" }
+
+    hs_sci: { text:"고3 선택과목 신청서, 어디에 먼저 동그라미를 칠까요?", choices:[
+      { label:"물리학 — 힘과 전기가 기계를 움직이는 원리가 궁금해요", short:"물리학", to:"uni_eng" },
+      { label:"확률과 통계 — 흩어진 숫자에서 규칙을 찾고 싶어요", short:"확률과 통계", to:"uni_stat" }
     ]},
-    logic_hands: { text:"취업 후, 어떤 일을 더 하고 싶나요?", choices:[
-      { label:"직접 설계하고 만드는 일 (반도체·로봇)", to:"hands" },
-      { label:"원리를 분석하고 개선하는 일 (데이터·연구)", to:"data" }
+    hs_data: { text:"고3 선택과목 신청서, 어디에 먼저 동그라미를 칠까요?", choices:[
+      { label:"미적분·확률과 통계 — 수학으로 예측하는 게 재밌어요", short:"미적분·통계", to:"uni_stat" },
+      { label:"정보(인공지능 기초) — AI가 판단하는 방식을 배우고 싶어요", short:"정보·AI 기초", to:"uni_ai" }
     ]},
-    logic_data: { text:"취업 후, 데이터를 다루며 어떤 역할을 하고 싶나요?", choices:[
-      { label:"패턴을 찾아 미래를 예측하는 역할", to:"data" },
-      { label:"결과가 공정하고 안전한지 검증하는 역할", to:"ethics" }
+    hs_art: { text:"고3 선택과목 신청서, 어디에 먼저 동그라미를 칠까요?", choices:[
+      { label:"정보(인공지능 기초) — AI로 그림과 영상을 만들어 보고 싶어요", short:"정보·AI 기초", to:"uni_ai" },
+      { label:"미술 창작 — 손으로 직접 표현하는 힘을 기르고 싶어요", short:"미술 창작", to:"uni_design" }
     ]},
-    people_creative: { text:"취업 후, 만든 결과물로 어떤 일을 하고 싶나요?", choices:[
-      { label:"더 많은 사람에게 상상력을 보여주는 창작 활동", to:"creative" },
-      { label:"AI가 표현을 이해하고 함께 만들게 하는 개발", to:"lang" }
+    hs_lang: { text:"고3 선택과목 신청서, 어디에 먼저 동그라미를 칠까요?", choices:[
+      { label:"미디어 콘텐츠 — 이야기를 영상으로 풀어내고 싶어요", short:"미디어 콘텐츠", to:"uni_design" },
+      { label:"언어와 매체 — 말이 통하는 원리를 파고들고 싶어요", short:"언어와 매체", to:"uni_lang" }
     ]},
-    people_talk: { text:"취업 후, 대화와 관련해 어떤 일을 하고 싶나요?", choices:[
-      { label:"AI가 사람의 말을 더 잘 알아듣게 만드는 일", to:"lang" },
-      { label:"마음에 공감하는 이야기를 함께 만드는 일", to:"creative" }
+
+    uni_eng: { text:"대학 첫 학기, 어떤 수업 계획서를 보고 가장 설렜나요?", choices:[
+      { label:"반도체 회로 설계 — AI의 두뇌를 직접 만들어 보는 실습", short:"반도체 회로 설계", to:"act_build" },
+      { label:"센서 데이터 처리 — 로봇이 읽은 숫자를 해석하는 수업", short:"센서 데이터 처리", to:"act_data" }
+    ]},
+    uni_stat: { text:"대학 첫 학기, 어떤 수업 계획서를 보고 가장 설렜나요?", choices:[
+      { label:"머신러닝 기초 — 데이터로 미래를 예측하는 모델 만들기", short:"머신러닝 기초", to:"act_data" },
+      { label:"데이터 윤리 — 예측이 누군가에게 불공정하지 않은지 따지기", short:"데이터 윤리", to:"act_trust" }
+    ]},
+    uni_ai: { text:"대학 첫 학기, 어떤 수업 계획서를 보고 가장 설렜나요?", choices:[
+      { label:"AI 안전성 — AI가 위험한 답을 내놓지 않게 막는 방법", short:"AI 안전성", to:"act_trust" },
+      { label:"AI 반도체 구조 — AI가 어떤 기계 위에서 도는지 뜯어보기", short:"AI 반도체 구조", to:"act_build" }
+    ]},
+    uni_design: { text:"대학 첫 학기, 어떤 수업 계획서를 보고 가장 설렜나요?", choices:[
+      { label:"생성형 AI 창작 — AI를 붓처럼 써서 작품 만들기", short:"생성형 AI 창작", to:"act_make" },
+      { label:"인터랙션 디자인 — 사람이 AI와 대화하는 화면 설계하기", short:"인터랙션 디자인", to:"act_talk" }
+    ]},
+    uni_lang: { text:"대학 첫 학기, 어떤 수업 계획서를 보고 가장 설렜나요?", choices:[
+      { label:"자연어 처리 입문 — 컴퓨터가 문장을 이해하는 원리", short:"자연어 처리", to:"act_talk" },
+      { label:"스토리텔링 — AI와 함께 이야기를 쓰는 실험", short:"스토리텔링", to:"act_make" }
+    ]},
+
+    act_build: { text:"방학 때 딱 한 가지만 할 수 있다면?", choices:[
+      { label:"로봇 대회 출전 — 밤새 조립하고 코드 고쳐서 움직이게 하기", short:"로봇 대회 출전", to:"job_build" },
+      { label:"센서 데이터 분석 — 로봇이 모은 기록을 뜯어보기", short:"센서 데이터 분석", to:"job_data" }
+    ]},
+    act_data: { text:"방학 때 딱 한 가지만 할 수 있다면?", choices:[
+      { label:"데이터 분석 공모전 — 공공데이터로 문제 찾아 해결하기", short:"데이터 공모전", to:"job_data" },
+      { label:"AI 모델 검증 스터디 — 모델이 틀리는 경우 찾아내기", short:"AI 모델 검증", to:"job_trust" }
+    ]},
+    act_trust: { text:"방학 때 딱 한 가지만 할 수 있다면?", choices:[
+      { label:"AI 정책 토론 캠프 — AI 규칙을 어떻게 정할지 토론하기", short:"AI 정책 토론", to:"job_trust" },
+      { label:"AI 서버 하드웨어 스터디 — AI가 도는 기계를 직접 보기", short:"AI 하드웨어 스터디", to:"job_build" }
+    ]},
+    act_make: { text:"방학 때 딱 한 가지만 할 수 있다면?", choices:[
+      { label:"개인 작품 전시 — AI로 만든 작업물로 전시회 열기", short:"AI 작품 전시", to:"job_make" },
+      { label:"AI 창작 툴 개발 — 창작자들이 쓸 도구를 직접 만들기", short:"AI 창작 툴 개발", to:"job_talk" }
+    ]},
+    act_talk: { text:"방학 때 딱 한 가지만 할 수 있다면?", choices:[
+      { label:"AI 챗봇 만들기 — 사람 말을 알아듣게 훈련시키기", short:"AI 챗봇 만들기", to:"job_talk" },
+      { label:"AI 공동창작 — AI와 번갈아 이야기 이어쓰기", short:"AI 공동창작", to:"job_make" }
+    ]},
+
+    job_build: { text:"첫 출근 날, 어떤 일이 책상에 놓여 있으면 좋겠나요?", choices:[
+      { label:"새 AI 칩 설계도 검토 — 더 빠르고 덜 뜨거운 칩 만들기", short:"AI 칩 설계", to:"hands" },
+      { label:"로봇 주행 기록 분석 — 왜 멈췄는지 데이터로 찾기", short:"로봇 기록 분석", to:"data" }
+    ]},
+    job_data: { text:"첫 출근 날, 어떤 일이 책상에 놓여 있으면 좋겠나요?", choices:[
+      { label:"다음 달 수요를 맞히는 예측 모델 만들기", short:"수요 예측 모델", to:"data" },
+      { label:"모델이 특정 집단에 불리하게 예측하는지 점검하기", short:"모델 공정성 점검", to:"ethics" }
+    ]},
+    job_trust: { text:"첫 출근 날, 어떤 일이 책상에 놓여 있으면 좋겠나요?", choices:[
+      { label:"회사 AI가 지켜야 할 안전 기준 문서 만들기", short:"AI 안전 기준", to:"ethics" },
+      { label:"AI 서버가 어디서 느려지는지 하드웨어 점검하기", short:"AI 서버 점검", to:"hands" }
+    ]},
+    job_make: { text:"첫 출근 날, 어떤 일이 책상에 놓여 있으면 좋겠나요?", choices:[
+      { label:"신제품 광고 영상 시안을 AI로 20개 뽑아내기", short:"AI 광고 시안", to:"creative" },
+      { label:"AI가 우리 브랜드 말투로 글 쓰도록 다듬기", short:"AI 말투 다듬기", to:"lang" }
+    ]},
+    job_talk: { text:"첫 출근 날, 어떤 일이 책상에 놓여 있으면 좋겠나요?", choices:[
+      { label:"AI 상담원이 사투리를 못 알아듣는 문제 고치기", short:"AI 말귀 개선", to:"lang" },
+      { label:"AI와 함께 쓸 인터랙티브 스토리 기획하기", short:"AI 스토리 기획", to:"creative" }
     ]}
   };
 
   var RESULTS = {
-    data:{ icon:"data", title:"데이터사이언스 · 머신러닝형", tagline:"숫자와 패턴 속에서 답을 찾아내는 탐험가",
+    hands:{ icon:"hands", lane:0, title:"AI 반도체·로보틱스형", tagline:"AI에게 몸을 만들어주는 엔지니어",
+      desc:"직접 만들고 움직이게 하는 걸 좋아하는 사람이에요. AI의 두뇌(반도체)와 몸(로봇)을 만드는 일에 잘 맞아요.",
+      jobs:["반도체설계엔지니어","로봇공학자"], majors:["전자공학과","로봇공학과","반도체공학과(계약학과)"] },
+    data:{ icon:"data", lane:1, title:"데이터사이언스 · 머신러닝형", tagline:"숫자와 패턴 속에서 답을 찾아내는 탐험가",
       desc:"데이터 속에 숨은 규칙을 읽어내고, 그걸로 미래를 예측하는 일에 강해요. 수학·통계 공부가 큰 힘이 되는 분야예요.",
       jobs:["데이터사이언티스트","머신러닝엔지니어","AI연구원"], majors:["데이터사이언스학과","통계학과","산업공학과"] },
-    lang:{ icon:"lang", title:"AI 언어·소통형", tagline:"AI가 사람의 말과 마음을 이해하게 만드는 통역사",
-      desc:"사람의 말과 감정을 잘 읽어내고, AI가 사람과 자연스럽게 대화하도록 설계하는 역할에 잘 맞아요.",
-      jobs:["NLP엔지니어","AI서비스기획자","프롬프트엔지니어"], majors:["소프트웨어학과","언어학과","경영학과(AI융합)"] },
-    creative:{ icon:"creative", title:"생성형 AI 크리에이터형", tagline:"AI를 붓과 펜처럼 다루는 창작자",
-      desc:"상상한 장면을 눈에 보이게, 떠오른 이야기를 글로 만들어내는 힘이 있어요. AI는 훌륭한 창작 도구가 되어줄 거예요.",
-      jobs:["AI아티스트","AI작가","AI콘텐츠기획자"], majors:["디자인학과","미디어콘텐츠학과","문예창작과(AI융합)"] },
-    ethics:{ icon:"ethics", title:"AI 신뢰·윤리형", tagline:"기술과 사람 사이의 균형을 지키는 안전요원",
+    ethics:{ icon:"ethics", lane:2, title:"AI 신뢰·윤리형", tagline:"기술과 사람 사이의 균형을 지키는 안전요원",
       desc:"AI가 공정하고 안전하게 쓰이는지 살피는 역할이에요. 앞으로 가장 중요해질 분야 중 하나로 꼽혀요.",
       jobs:["AI 신뢰성 검증 전문가","AI 정책기획자"], majors:["인공지능학과","철학과","법학과(AI융합)"] },
-    hands:{ icon:"hands", title:"AI 반도체·로보틱스형", tagline:"AI에게 몸을 만들어주는 엔지니어",
-      desc:"직접 만들고 움직이게 하는 걸 좋아하는 사람이에요. AI의 두뇌(반도체)와 몸(로봇)을 만드는 일에 잘 맞아요.",
-      jobs:["반도체설계엔지니어","로봇공학자"], majors:["전자공학과","로봇공학과","반도체공학과(계약학과)"] }
+    lang:{ icon:"lang", lane:3, title:"AI 언어·소통형", tagline:"AI가 사람의 말과 마음을 이해하게 만드는 통역사",
+      desc:"사람의 말과 감정을 잘 읽어내고, AI가 사람과 자연스럽게 대화하도록 설계하는 역할에 잘 맞아요.",
+      jobs:["NLP엔지니어","AI서비스기획자","프롬프트엔지니어"], majors:["소프트웨어학과","언어학과","경영학과(AI융합)"] },
+    creative:{ icon:"creative", lane:4, title:"생성형 AI 크리에이터형", tagline:"AI를 붓과 펜처럼 다루는 창작자",
+      desc:"상상한 장면을 눈에 보이게, 떠오른 이야기를 글로 만들어내는 힘이 있어요. AI는 훌륭한 창작 도구가 되어줄 거예요.",
+      jobs:["AI아티스트","AI작가","AI콘텐츠기획자"], majors:["디자인학과","미디어콘텐츠학과","문예창작과(AI융합)"] }
   };
 
-  var STAGE_LABELS = ["중학교","고등학교","대학교","취업"];
-  var TOTAL_STEPS = 4;
-
-  // ---------------------------------------------------------------
-  // Game state
-  // ---------------------------------------------------------------
+  // =================================================================
+  // 2. STATE + DOM
+  // =================================================================
   var state = { step:0, currentNode:"start", path:[] };
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -329,62 +529,102 @@
   var progressRow = document.getElementById("progress-row");
   var guideToggle = document.getElementById("guide-toggle");
   var guidePanel = document.getElementById("guide-panel");
-  var roadmapRow = document.getElementById("roadmap-row");
+  var roadmapList = document.getElementById("roadmap-list");
+  var nameInput = document.getElementById("student-name");
+  var saveBtn = document.getElementById("btn-save-image");
 
   guidePanel.innerHTML =
-    '<p>① 이 게임은 중학교 → 고등학교 → 대학교 → 취업 순서로 진로를 넓혀가는 구조예요. 각 단계의 선택은 결과 카드의 로드맵으로 정리돼요.</p>' +
-    '<p>② 결과가 나오면 바로 전문가 선생님께 "이 분야는 실제로 어떤 일을 하나요?" 라고 연결해 주세요.</p>' +
-    '<p>③ 학과 이름에 "AI"가 없어도 이 분야로 진출할 수 있다는 점을 꼭 짚어 주세요.</p>' +
-    '<p>④ 결과는 정답이 아니라 탐색의 출발점입니다. "이미지로 저장" 버튼으로 저장해 기록으로 남겨 보세요.</p>';
+    '<p>① 중학교 → 고등학교 → 선택과목 → 대학 전공 → 대학 활동 → 취업, 여섯 단계로 진로가 좁혀지는 구조예요. 모든 선택은 결과 카드에 그대로 기록됩니다.</p>' +
+    '<p>② 점수 계산이 아니라 선택한 길 그대로 이어지는 방식이라, "왜 이 결과가 나왔는지" 아이와 함께 되짚어 볼 수 있어요.</p>' +
+    '<p>③ 결과가 나오면 바로 전문가 선생님께 "이 분야는 실제로 어떤 일을 하나요?" 라고 연결해 주세요.</p>' +
+    '<p>④ 학과 이름에 "AI"가 없어도 이 분야로 진출할 수 있다는 점을 꼭 짚어 주세요.</p>' +
+    '<p>⑤ 이름을 적고 "포토카드 저장"을 누르면 세로형 이미지로 저장돼요. 결과는 정답이 아니라 탐색의 출발점입니다.</p>';
   guideToggle.addEventListener("click", function(){
     var open = !guidePanel.hidden;
     guidePanel.hidden = open;
     guideToggle.textContent = open ? "진로교사용 진행 가이드 보기" : "진행 가이드 닫기";
   });
 
-  // ---------------------------------------------------------------
-  // Three.js scene
-  // ---------------------------------------------------------------
+  // =================================================================
+  // 3. THREE.JS SCENE
+  // =================================================================
   var canvas = document.getElementById("gl");
   var stageEl = canvas.parentElement;
   var isDark = (document.documentElement.getAttribute("data-theme") === "dark") ||
     (!document.documentElement.hasAttribute("data-theme") && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
 
   var PALETTE = isDark ? {
-    sky:0x0c1712, fogColor:0x0c1712, ground:0x16281f, groundFar:0x0e1e18,
-    tileDim:0x4a3d29, tileLit:0xf0b94d, summitDim:0x3a2f1e, summitLit:0xf0b94d,
-    edgeDim:0x4a3d29, edgeLit:0xf0b94d, tree:0x1f4131, ambient:0x9fc2ab, sun:0xfff2d0, sunI:0.55, ambI:0.5
+    skyTop:"#16324a", skyBot:"#123326", fog:0x143024,
+    ground:0x1d3a2b, hill:[0x1f4131, 0x24513c, 0x1a3528],
+    tileDim:0x3d4a42, edgeDim:0x50604f, edgeLit:0xffc861,
+    cloud:0x3c5568, tree:0x235640, tree2:0x2c6b4c, trunk:0x4a3324,
+    ambient:0xa8c8bb, ambI:0.62, sun:0xfff0cf, sunI:0.72, tintMix:0.55
   } : {
-    sky:0xcdeadb, fogColor:0xcdeadb, ground:0x8bc49f, groundFar:0xa9d9ba, tileDim:0xdcc99a, tileLit:0xe2a33d,
-    summitDim:0xdcc99a, summitLit:0xe2a33d, edgeDim:0xcdb27e, edgeLit:0xe2a33d, tree:0x5a9f78,
-    ambient:0xffffff, sun:0xfff6df, sunI:0.65, ambI:0.55
+    skyTop:"#bfe6ff", skyBot:"#eafaf0", fog:0xdff2e6,
+    ground:0x8fd3a6, hill:[0xa9dfbd, 0x86c99e, 0x6fb98d],
+    tileDim:0xe7dcc4, edgeDim:0xe0cfa6, edgeLit:0xffb545,
+    cloud:0xffffff, tree:0x57b783, tree2:0x7ccb9c, trunk:0x8a6242,
+    ambient:0xffffff, ambI:0.72, sun:0xfff6df, sunI:0.68, tintMix:1
   };
 
-  var scene = new THREE.Scene();
-  scene.background = new THREE.Color(PALETTE.sky);
-  scene.fog = new THREE.Fog(PALETTE.fogColor, 27, 42);
+  function mixTint(hex){
+    // In dark mode, mute the pastel platform tints so they stay readable.
+    var c = new THREE.Color(hex);
+    if (PALETTE.tintMix < 1) c.multiplyScalar(PALETTE.tintMix).offsetHSL(0, -0.15, -0.08);
+    return c;
+  }
 
-  var VIEW_W = 24, VIEW_H = 18; // fixed 4:3 ortho frustum, matches .stage aspect-ratio
-  var camera = new THREE.OrthographicCamera(-VIEW_W/2, VIEW_W/2, VIEW_H/2, -VIEW_H/2, -50, 50);
+  var scene = new THREE.Scene();
+  (function setSky(){
+    var c = document.createElement("canvas");
+    c.width = 4; c.height = 256;
+    var ctx = c.getContext("2d");
+    var g = ctx.createLinearGradient(0, 0, 0, 256);
+    g.addColorStop(0, PALETTE.skyTop);
+    g.addColorStop(1, PALETTE.skyBot);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 4, 256);
+    scene.background = new THREE.CanvasTexture(c);
+  })();
+  scene.fog = new THREE.Fog(PALETTE.fog, 34, 58);
+
+  var VIEW_W = 24, VIEW_H = 18;
+  var camera = new THREE.OrthographicCamera(-VIEW_W/2, VIEW_W/2, VIEW_H/2, -VIEW_H/2, -80, 80);
   var CAM_TARGET0 = new THREE.Vector3(0, 1.8, 8);
   camera.position.set(-13, 11, -13);
   camera.lookAt(CAM_TARGET0);
   var camOffsetDir = camera.position.clone().sub(CAM_TARGET0);
   var camTarget = CAM_TARGET0.clone();
   var camTargetGoal = CAM_TARGET0.clone();
-  var zoomLevel = 0.74, zoomGoal = 0.74;
+  var zoomLevel = 0.72, zoomGoal = 0.72;
+  var stageAspect = 4/3;
+  // Character should face the camera while a question is on screen.
+  var IDLE_YAW = Math.atan2(camOffsetDir.x, camOffsetDir.z);
+
+  // Screen-space "up" in world terms, used to sit the character in the lower
+  // third of the frame so the speech bubble always has clear room above it.
+  var CAM_FWD = camOffsetDir.clone().negate().normalize();
+  var UP_SCREEN = new THREE.Vector3(0,1,0).projectOnPlane(CAM_FWD).normalize();
+  var FRAME_DROP = 0.42;
+  var _camV = new THREE.Vector3();
+
   function updateCameraGoal(nodeId, stepIndex){
     var n = NODES[nodeId];
-    camTargetGoal.set(n.x*0.6, n.y+1.05, n.z+1.15);
-    zoomGoal = Math.max(0.4, 0.74 - 0.09*stepIndex);
+    zoomGoal = Math.max(0.44, 0.72 - 0.048*stepIndex);
+    var drop = FRAME_DROP * (VIEW_H/2) * zoomGoal;
+    // pull outer lanes gently toward the middle so the whole tree stays readable
+    _camV.set(n.x*0.72, n.y + 0.3, n.z);
+    camTargetGoal.copy(_camV).addScaledVector(UP_SCREEN, drop);
   }
   function applyCamera(){
     camera.position.copy(camTarget).add(camOffsetDir);
     camera.lookAt(camTarget);
-    camera.left = -VIEW_W/2*zoomLevel;
-    camera.right = VIEW_W/2*zoomLevel;
-    camera.top = VIEW_H/2*zoomLevel;
-    camera.bottom = -VIEW_H/2*zoomLevel;
+    var halfH = VIEW_H/2 * zoomLevel;
+    var halfW = halfH * stageAspect;
+    camera.left = -halfW;
+    camera.right = halfW;
+    camera.top = halfH;
+    camera.bottom = -halfH;
     camera.updateProjectionMatrix();
   }
   function snapCameraTo(nodeId, stepIndex){
@@ -395,85 +635,176 @@
   }
   snapCameraTo("start", 0);
 
-  var renderer = new THREE.WebGLRenderer({ canvas:canvas, antialias:true });
+  // preserveDrawingBuffer lets the photo card include a snapshot of the scene.
+  var renderer = new THREE.WebGLRenderer({ canvas:canvas, antialias:true, preserveDrawingBuffer:true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
-
   function fitRenderer(){
     var w = stageEl.clientWidth, h = stageEl.clientHeight;
-    if (w>0 && h>0) renderer.setSize(w, h, false);
+    if (w>0 && h>0){
+      renderer.setSize(w, h, false);
+      stageAspect = w/h;
+      applyCamera();
+    }
   }
   fitRenderer();
 
   scene.add(new THREE.AmbientLight(PALETTE.ambient, PALETTE.ambI));
   var sun = new THREE.DirectionalLight(PALETTE.sun, PALETTE.sunI);
-  sun.position.set(8, 16, -6);
+  sun.position.set(10, 18, -4);
   scene.add(sun);
+  var rim = new THREE.DirectionalLight(0xbfe0ff, 0.22);
+  rim.position.set(-10, 8, 14);
+  scene.add(rim);
 
-  // ground
-  var groundGeo = new THREE.PlaneGeometry(60, 60, 1, 1);
-  var groundMat = new THREE.MeshStandardMaterial({ color: PALETTE.ground, roughness:1 });
-  var ground = new THREE.Mesh(groundGeo, groundMat);
+  function mat(color, rough){
+    return new THREE.MeshStandardMaterial({ color:color, roughness: rough===undefined ? 0.85 : rough, flatShading:false });
+  }
+
+  // ---- ground + rolling hills ----
+  var ground = new THREE.Mesh(new THREE.PlaneGeometry(120, 120), mat(PALETTE.ground, 1));
   ground.rotation.x = -Math.PI/2;
-  ground.position.set(0, -0.05, 8);
+  ground.position.set(0, -0.08, 13);
   scene.add(ground);
 
-  // decorative low-poly trees scattered beside the path
-  function addTree(x,z,scale){
+  var hillSpots = [
+    [-17, 2, 7, 1.3], [17, 4, 6.5, 1.15], [-20, 15, 8, 1.4], [20, 17, 7.5, 1.25],
+    [-13, 27, 6, 1.1], [14, 29, 6.5, 1.2], [0, 34, 9, 1.5], [-26, 22, 7, 1.3]
+  ];
+  hillSpots.forEach(function(h, i){
+    var m = new THREE.Mesh(new THREE.SphereGeometry(h[2], 16, 10), mat(PALETTE.hill[i % 3], 1));
+    m.position.set(h[0], -h[2]*0.55, h[1]);
+    m.scale.set(1, h[3]*0.42, 1);
+    scene.add(m);
+  });
+
+  // ---- drifting clouds ----
+  var clouds = [];
+  function addCloud(x, y, z, s){
     var g = new THREE.Group();
-    var trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.11,0.5,6), new THREE.MeshStandardMaterial({color:0x6b4a2f, roughness:1}));
-    trunk.position.y = 0.25;
-    var leaves = new THREE.Mesh(new THREE.ConeGeometry(0.55,1.2,7), new THREE.MeshStandardMaterial({color:PALETTE.tree, roughness:1}));
-    leaves.position.y = 1.05;
-    g.add(trunk, leaves);
+    var cm = new THREE.MeshStandardMaterial({ color:PALETTE.cloud, roughness:1, transparent:true, opacity:0.94 });
+    [[0,0,0,1], [0.9,-0.12,0.1,0.72], [-0.85,-0.16,-0.1,0.66], [0.35,0.3,0,0.6]].forEach(function(p){
+      var b = new THREE.Mesh(new THREE.SphereGeometry(0.8*p[3], 12, 8), cm);
+      b.position.set(p[0], p[1], p[2]);
+      g.add(b);
+    });
+    g.position.set(x, y, z);
+    g.scale.setScalar(s);
+    scene.add(g);
+    clouds.push({ g:g, speed: 0.22 + Math.random()*0.3 });
+  }
+  addCloud(-14, 9.5, 6, 1.5); addCloud(12, 11, 12, 1.9); addCloud(-8, 12.5, 22, 1.6);
+  addCloud(16, 10, 26, 1.4); addCloud(-18, 10.5, 32, 1.7);
+
+  // ---- cute props: flowers, mushrooms, two tree kinds ----
+  var swayables = [];
+  function addPineTree(x, z, s){
+    var g = new THREE.Group();
+    var trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.13, 0.55, 6), mat(PALETTE.trunk, 1));
+    trunk.position.y = 0.27;
+    var c1 = new THREE.Mesh(new THREE.ConeGeometry(0.62, 0.95, 8), mat(PALETTE.tree, 1));
+    c1.position.y = 0.98;
+    var c2 = new THREE.Mesh(new THREE.ConeGeometry(0.46, 0.78, 8), mat(PALETTE.tree2, 1));
+    c2.position.y = 1.48;
+    g.add(trunk, c1, c2);
     g.position.set(x, 0, z);
-    g.scale.setScalar(scale);
+    g.scale.setScalar(s);
+    scene.add(g);
+    swayables.push({ g:g, phase: Math.random()*6.28, amp: 0.035 });
+  }
+  function addRoundTree(x, z, s){
+    var g = new THREE.Group();
+    var trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.13, 0.6, 6), mat(PALETTE.trunk, 1));
+    trunk.position.y = 0.3;
+    var top = new THREE.Mesh(new THREE.SphereGeometry(0.6, 12, 9), mat(PALETTE.tree2, 1));
+    top.position.y = 1.12;
+    top.scale.set(1, 0.92, 1);
+    var top2 = new THREE.Mesh(new THREE.SphereGeometry(0.38, 10, 8), mat(PALETTE.tree, 1));
+    top2.position.set(0.3, 0.85, 0.18);
+    g.add(trunk, top, top2);
+    g.position.set(x, 0, z);
+    g.scale.setScalar(s);
+    scene.add(g);
+    swayables.push({ g:g, phase: Math.random()*6.28, amp: 0.03 });
+  }
+  var FLOWER_COLORS = [0xff8fb1, 0xffd166, 0xb69bff, 0xff9e6d, 0x8fd9ff];
+  function addFlower(x, z, ci){
+    var g = new THREE.Group();
+    var stem = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.3, 5), mat(0x5da879, 1));
+    stem.position.y = 0.15;
+    var head = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 6), mat(FLOWER_COLORS[ci % FLOWER_COLORS.length], 0.7));
+    head.position.y = 0.33;
+    head.scale.set(1, 0.7, 1);
+    var core = new THREE.Mesh(new THREE.SphereGeometry(0.045, 6, 5), mat(0xfff2b0, 0.6));
+    core.position.y = 0.38;
+    g.add(stem, head, core);
+    g.position.set(x, 0, z);
+    scene.add(g);
+    swayables.push({ g:g, phase: Math.random()*6.28, amp: 0.09 });
+  }
+  function addMushroom(x, z){
+    var g = new THREE.Group();
+    var stem = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.09, 0.22, 7), mat(0xfff3e2, 0.9));
+    stem.position.y = 0.11;
+    var cap = new THREE.Mesh(new THREE.SphereGeometry(0.17, 10, 6, 0, Math.PI*2, 0, Math.PI/2), mat(0xf0665f, 0.7));
+    cap.position.y = 0.2;
+    cap.scale.set(1, 0.8, 1);
+    g.add(stem, cap);
+    g.position.set(x, 0, z);
     scene.add(g);
   }
-  var treeSpots = [[-9,2,1],[9,1,1.1],[-9.5,9,0.9],[9.5,8,1.2],[-11,15,1],[11,14.5,0.9],[-4.5,17.5,0.8],[4.8,18,0.85]];
-  treeSpots.forEach(function(t){ addTree(t[0],t[1],t[2]); });
+  [[-10.5,2,1.1],[10.5,3,1.0],[-12,11,1.2],[12.5,9,0.95],[-13,19,1.1],[13,21,1.05],[-11,29,1.0],[11.5,31,1.15]]
+    .forEach(function(t, i){ (i % 2 === 0 ? addPineTree : addRoundTree)(t[0], t[1], t[2]); });
+  [[-9.6,5.5,0],[9.8,7,1],[-10.2,14,2],[10.4,16,3],[-9.9,24,4],[10.1,26,0],[-6.4,1.4,1],[6.6,2.2,2],
+   [-10.8,33,3],[10.9,34,4]].forEach(function(f){ addFlower(f[0], f[1], f[2]); });
+  [[-8.8,9.4],[8.9,18.6],[-7.9,27.4],[7.6,12.2]].forEach(function(m){ addMushroom(m[0], m[1]); });
 
-  // ---- build node platforms ----
-  var nodeMeshes = {};
+  // ---- node platforms ----
+  var nodeMeshes = {}, nodeRims = {};
   function buildNode(id){
     var n = NODES[id];
     var isSummit = n.kind === "summit";
-    var radius = isSummit ? 1.05 : 0.85;
-    var geo = new THREE.CylinderGeometry(radius, radius*1.05, 0.28, 22);
-    var mat = new THREE.MeshStandardMaterial({
-      color: isSummit ? PALETTE.summitDim : PALETTE.tileDim,
-      roughness:0.85
-    });
-    var mesh = new THREE.Mesh(geo, mat);
-    mesh.position.set(n.x, n.y, n.z);
-    scene.add(mesh);
-    nodeMeshes[id] = mesh;
+    var r = isSummit ? 1.15 : 0.92;
+    var tint = mixTint(LEVEL_TINT[n.level]);
+
+    var top = new THREE.Mesh(new THREE.CylinderGeometry(r, r*1.04, 0.3, 24), mat(PALETTE.tileDim, 0.9));
+    top.position.set(n.x, n.y, n.z);
+    top.material.color.copy(tint);
+    scene.add(top);
+    nodeMeshes[id] = top;
+
+    var rimMesh = new THREE.Mesh(new THREE.TorusGeometry(r*0.99, 0.075, 8, 26), mat(0xffffff, 0.55));
+    rimMesh.rotation.x = Math.PI/2;
+    rimMesh.position.set(n.x, n.y+0.155, n.z);
+    rimMesh.material.color.copy(tint).offsetHSL(0, 0.1, 0.16);
+    scene.add(rimMesh);
+    nodeRims[id] = rimMesh;
 
     if (isSummit){
-      var pole = new THREE.Mesh(new THREE.CylinderGeometry(0.035,0.035,1.3,6), new THREE.MeshStandardMaterial({color:0x8a8a8a}));
-      pole.position.set(n.x, n.y+0.8, n.z);
-      var flagMat = new THREE.MeshStandardMaterial({ color: PALETTE.summitLit, roughness:0.6 });
-      var flag = new THREE.Mesh(new THREE.BoxGeometry(0.46,0.28,0.045), flagMat);
-      flag.position.set(n.x+0.25, n.y+1.28, n.z);
-      flag.rotation.y = -0.55;
-      scene.add(pole, flag);
+      var laneColor = LANE_COLOR[n.lane];
+      var pole = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 1.5, 6), mat(0xf2f2f2, 0.5));
+      pole.position.set(n.x, n.y+0.9, n.z);
+      var flag = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.34, 0.05), mat(laneColor, 0.55));
+      flag.position.set(n.x+0.3, n.y+1.45, n.z);
+      flag.rotation.y = -0.5;
+      var knob = new THREE.Mesh(new THREE.SphereGeometry(0.08, 8, 6), mat(0xfff0b8, 0.5));
+      knob.position.set(n.x, n.y+1.68, n.z);
+      scene.add(pole, flag, knob);
+      swayables.push({ g:flag, phase: Math.random()*6.28, amp: 0.16 });
     }
   }
   Object.keys(NODES).forEach(buildNode);
 
-  // ---- build edges (tubes) between question -> choice target ----
-  var edgeMeshes = {}; // key "from>to" -> mesh
-  var edgeCurves = {}; // key -> THREE.Curve
+  // ---- path tubes ----
+  var edgeMeshes = {}, edgeCurves = {};
   function buildEdge(fromId, toId){
     var a = NODES[fromId], b = NODES[toId];
-    var key = fromId+">"+toId;
+    var key = fromId + ">" + toId;
     if (edgeMeshes[key]) return;
-    var mid = new THREE.Vector3((a.x+b.x)/2, Math.max(a.y,b.y)+1.0, (a.z+b.z)/2);
+    var mid = new THREE.Vector3((a.x+b.x)/2, Math.max(a.y, b.y)+1.05, (a.z+b.z)/2);
     var curve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(a.x,a.y,a.z), mid, new THREE.Vector3(b.x,b.y,b.z)
+      new THREE.Vector3(a.x, a.y, a.z), mid, new THREE.Vector3(b.x, b.y, b.z)
     ]);
-    var tubeGeo = new THREE.TubeGeometry(curve, 24, 0.11, 8, false);
-    var tubeMat = new THREE.MeshStandardMaterial({ color: PALETTE.edgeDim, roughness:0.7 });
-    var mesh = new THREE.Mesh(tubeGeo, tubeMat);
+    var mesh = new THREE.Mesh(new THREE.TubeGeometry(curve, 26, 0.115, 8, false), mat(PALETTE.edgeDim, 0.75));
     scene.add(mesh);
     edgeMeshes[key] = mesh;
     edgeCurves[key] = curve;
@@ -482,79 +813,158 @@
     QUESTIONS[fromId].choices.forEach(function(c){ buildEdge(fromId, c.to); });
   });
 
-  // ---- character ("말") ----
+  // ---- chibi character ----
   var character = new THREE.Group();
+  var armL, armR;
   (function buildCharacter(){
-    var body = new THREE.Mesh(new THREE.CylinderGeometry(0.24,0.3,0.5,14), new THREE.MeshStandardMaterial({color:0x2f6b4f, roughness:0.6}));
-    body.position.y = 0.5;
-    var head = new THREE.Mesh(new THREE.SphereGeometry(0.24,18,14), new THREE.MeshStandardMaterial({color:0xf4c08e, roughness:0.6}));
-    head.position.y = 0.92;
-    var hat = new THREE.Mesh(new THREE.ConeGeometry(0.27,0.24,14), new THREE.MeshStandardMaterial({color:0xc1841f, roughness:0.7}));
-    hat.position.y = 1.16;
-    var pack = new THREE.Mesh(new THREE.BoxGeometry(0.22,0.32,0.16), new THREE.MeshStandardMaterial({color:0xd64550, roughness:0.7}));
-    pack.position.set(0,0.55,-0.24);
-    var legL = new THREE.Mesh(new THREE.CylinderGeometry(0.07,0.07,0.28,8), new THREE.MeshStandardMaterial({color:0x4b5c51}));
-    legL.position.set(-0.11,0.14,0);
-    var legR = legL.clone(); legR.position.x = 0.11;
-    character.add(body, head, hat, pack, legL, legR);
+    var skin = mat(0xffd9b8, 0.65);
+    var body = new THREE.Mesh(new THREE.CylinderGeometry(0.21, 0.27, 0.42, 14), mat(0x3fa87a, 0.6));
+    body.position.y = 0.46;
+
+    var head = new THREE.Mesh(new THREE.SphereGeometry(0.31, 20, 16), skin);
+    head.position.y = 0.94;
+    head.scale.set(1, 0.95, 0.95);
+
+    var hair = new THREE.Mesh(new THREE.SphereGeometry(0.315, 18, 12, 0, Math.PI*2, 0, Math.PI*0.55), mat(0x4a3426, 0.75));
+    hair.position.y = 0.955;
+
+    var hat = new THREE.Mesh(new THREE.ConeGeometry(0.3, 0.28, 14), mat(0xf2a03d, 0.65));
+    hat.position.y = 1.26;
+    var brim = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.045, 7, 18), mat(0xd98526, 0.65));
+    brim.rotation.x = Math.PI/2;
+    brim.position.y = 1.13;
+    var pom = new THREE.Mesh(new THREE.SphereGeometry(0.085, 10, 8), mat(0xff8fb1, 0.6));
+    pom.position.y = 1.44;
+
+    var eyeMat = mat(0x25201c, 0.35);
+    var eyeL = new THREE.Mesh(new THREE.SphereGeometry(0.056, 10, 8), eyeMat);
+    eyeL.position.set(-0.115, 0.965, 0.265);
+    var eyeR = eyeL.clone(); eyeR.position.x = 0.115;
+    var glintMat = mat(0xffffff, 0.2);
+    var glintL = new THREE.Mesh(new THREE.SphereGeometry(0.021, 8, 6), glintMat);
+    glintL.position.set(-0.132, 0.99, 0.305);
+    var glintR = glintL.clone(); glintR.position.x = 0.098;
+
+    var cheekMat = new THREE.MeshStandardMaterial({ color:0xff9db5, roughness:0.8, transparent:true, opacity:0.75 });
+    var cheekL = new THREE.Mesh(new THREE.SphereGeometry(0.062, 10, 8), cheekMat);
+    cheekL.position.set(-0.205, 0.885, 0.212);
+    cheekL.scale.set(1, 0.62, 0.42);
+    var cheekR = cheekL.clone(); cheekR.position.x = 0.205;
+
+    var smile = new THREE.Mesh(new THREE.TorusGeometry(0.062, 0.016, 8, 14, Math.PI), mat(0x9c5338, 0.5));
+    smile.position.set(0, 0.875, 0.268);
+    smile.rotation.set(0, 0, Math.PI);
+
+    armL = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.052, 0.3, 8), skin);
+    armL.position.set(-0.27, 0.5, 0);
+    armR = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.052, 0.3, 8), skin);
+    armR.position.set(0.27, 0.5, 0);
+
+    var pack = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.3, 0.16), mat(0xe05563, 0.65));
+    pack.position.set(0, 0.52, -0.235);
+    var packTop = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.09, 0.1), mat(0xffc861, 0.6));
+    packTop.position.set(0, 0.7, -0.235);
+
+    var legMat = mat(0x3f5347, 0.8);
+    var legL = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, 0.27, 8), legMat);
+    legL.position.set(-0.1, 0.135, 0);
+    var legR = legL.clone(); legR.position.x = 0.1;
+    var shoeMat = mat(0x2a2622, 0.7);
+    var shoeL = new THREE.Mesh(new THREE.SphereGeometry(0.085, 10, 7), shoeMat);
+    shoeL.position.set(-0.1, 0.045, 0.035);
+    shoeL.scale.set(1, 0.62, 1.25);
+    var shoeR = shoeL.clone(); shoeR.position.x = 0.1;
+
+    character.add(body, head, hair, hat, brim, pom, eyeL, eyeR, glintL, glintR,
+      cheekL, cheekR, smile, armL, armR, pack, packTop, legL, legR, shoeL, shoeR);
   })();
-  character.position.set(NODES.start.x, NODES.start.y+0.28, NODES.start.z);
+  character.position.set(NODES.start.x, NODES.start.y + 0.3, NODES.start.z);
+  character.rotation.y = IDLE_YAW;
   scene.add(character);
-  var restY = NODES.start.y + 0.28;
+  var restY = NODES.start.y + 0.3;
+  var yawGoal = IDLE_YAW;
 
-  function litColorFor(kind){ return kind === "summit" ? PALETTE.summitLit : PALETTE.tileLit; }
+  function litTint(id){
+    return new THREE.Color(NODES[id].kind === "summit" ? LANE_COLOR[NODES[id].lane] : 0xffc247);
+  }
 
+  // ---- HUD tracking: project the character into screen space each frame ----
   var _hudVec = new THREE.Vector3();
   function updateHudPosition(){
     if (hudQuestion.hidden) return;
     var w = stageEl.clientWidth, h = stageEl.clientHeight;
     if (!w || !h) return;
-    _hudVec.set(character.position.x, character.position.y + 1.3, character.position.z);
+    _hudVec.set(character.position.x, character.position.y + 1.55, character.position.z);
     _hudVec.project(camera);
-    var x = (_hudVec.x*0.5+0.5)*w;
-    var y = (1-(_hudVec.y*0.5+0.5))*h;
-    var bw = hudQuestion.offsetWidth || 240, bh = hudQuestion.offsetHeight || 120;
+    var x = (_hudVec.x*0.5 + 0.5) * w;
+    var y = (1 - (_hudVec.y*0.5 + 0.5)) * h;
+    var bw = hudQuestion.offsetWidth || 260, bh = hudQuestion.offsetHeight || 130;
     var left = Math.min(Math.max(x - bw/2, 8), Math.max(8, w - bw - 8));
-    var top = Math.min(Math.max(y - bh - 26, 8), Math.max(8, h - bh - 8));
+    var top = Math.min(Math.max(y - bh - 24, 8), Math.max(8, h - bh - 8));
     hudQuestion.style.transform = "translate(" + left + "px," + top + "px)";
   }
 
-  // ---------------------------------------------------------------
-  // Render / animation loop
-  // ---------------------------------------------------------------
+  // =================================================================
+  // 4. ANIMATION LOOP
+  // =================================================================
   var clock = new THREE.Clock();
-  var travel = null; // {curve, duration, elapsed, onDone}
+  var travel = null;
   var idlePhase = Math.random()*10;
+  var elapsedTotal = 0;
 
   function animate(){
     requestAnimationFrame(animate);
-    var dt = clock.getDelta();
+    var dt = Math.min(clock.getDelta(), 0.1);
     idlePhase += dt;
+    elapsedTotal += dt;
 
     if (travel){
       travel.elapsed += dt;
       var t = Math.min(1, travel.elapsed / travel.duration);
-      var eased = t<0.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
+      var eased = t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2;
       var p = travel.curve.getPointAt(eased);
-      var hop = reduceMotion ? 0 : Math.sin(eased*Math.PI) * 0.55;
-      character.position.set(p.x, p.y + 0.28 + hop, p.z);
+      var hop = reduceMotion ? 0 : Math.sin(eased*Math.PI) * 0.5;
+      character.position.set(p.x, p.y + 0.3 + hop, p.z);
       var tangent = travel.curve.getTangentAt(eased);
       if (tangent.x*tangent.x + tangent.z*tangent.z > 0.0001){
-        var yaw = Math.atan2(tangent.x, tangent.z);
-        character.rotation.y = yaw;
+        character.rotation.y = Math.atan2(tangent.x, tangent.z);
       }
-      var squash = reduceMotion ? 1 : 1 + Math.sin(eased*Math.PI)*0.12;
-      character.scale.set(1/squash*0.9+0.1, squash, 1/squash*0.9+0.1);
+      var swing = reduceMotion ? 0 : Math.sin(eased*Math.PI*7) * 0.85;
+      if (armL) armL.rotation.x = swing;
+      if (armR) armR.rotation.x = -swing;
+      var squash = reduceMotion ? 1 : 1 + Math.sin(eased*Math.PI)*0.1;
+      character.scale.set(1/squash*0.9 + 0.1, squash, 1/squash*0.9 + 0.1);
       if (t >= 1){
         var done = travel.onDone;
         travel = null;
-        character.scale.set(1,1,1);
+        character.scale.set(1, 1, 1);
         restY = character.position.y;
+        yawGoal = IDLE_YAW;
         if (done) done();
       }
     } else {
-      var bob = reduceMotion ? 0 : Math.sin(idlePhase*2.4)*0.05;
+      var bob = reduceMotion ? 0 : Math.sin(idlePhase*2.2)*0.045;
       character.position.y = restY + bob;
+      var armIdle = reduceMotion ? 0 : Math.sin(idlePhase*2.2)*0.12;
+      if (armL) armL.rotation.x = armIdle;
+      if (armR) armR.rotation.x = -armIdle;
+      // turn to face the viewer while a question is up
+      var diff = yawGoal - character.rotation.y;
+      while (diff > Math.PI) diff -= Math.PI*2;
+      while (diff < -Math.PI) diff += Math.PI*2;
+      character.rotation.y += diff * Math.min(1, dt*6);
+    }
+
+    if (!reduceMotion){
+      for (var ci = 0; ci < clouds.length; ci++){
+        var cl = clouds[ci];
+        cl.g.position.x += cl.speed * dt;
+        if (cl.g.position.x > 24) cl.g.position.x = -24;
+      }
+      for (var si = 0; si < swayables.length; si++){
+        var sw = swayables[si];
+        sw.g.rotation.z = Math.sin(elapsedTotal*1.3 + sw.phase) * sw.amp;
+      }
     }
 
     var smooth = reduceMotion ? 1 : Math.min(1, 1 - Math.pow(0.0006, dt));
@@ -562,42 +972,42 @@
     zoomLevel += (zoomGoal - zoomLevel) * smooth;
     applyCamera();
     updateHudPosition();
-
     renderer.render(scene, camera);
   }
   requestAnimationFrame(animate);
 
   window.addEventListener("resize", fitRenderer);
-  if (window.ResizeObserver){
-    new ResizeObserver(fitRenderer).observe(stageEl);
-  }
+  if (window.ResizeObserver) new ResizeObserver(fitRenderer).observe(stageEl);
 
   function moveCharacterTo(fromId, toId, callback){
-    var key = fromId+">"+toId;
-    var curve = edgeCurves[key];
+    var curve = edgeCurves[fromId + ">" + toId];
     if (!curve){
-      // fallback: straight line
       var a = NODES[fromId], b = NODES[toId];
       curve = new THREE.CatmullRomCurve3([new THREE.Vector3(a.x,a.y,a.z), new THREE.Vector3(b.x,b.y,b.z)]);
     }
-    travel = { curve: curve, duration: reduceMotion ? 0.15 : 1.1, elapsed: 0, onDone: callback };
+    travel = { curve:curve, duration: reduceMotion ? 0.15 : 1.05, elapsed:0, onDone:callback };
   }
 
   function lightUpPath(fromId, toId){
-    var key = fromId+">"+toId;
+    var key = fromId + ">" + toId;
     if (edgeMeshes[key]) edgeMeshes[key].material.color.set(PALETTE.edgeLit);
-    if (nodeMeshes[toId]) nodeMeshes[toId].material.color.set(litColorFor(NODES[toId].kind));
-    if (nodeMeshes[fromId]) nodeMeshes[fromId].material.color.set(litColorFor(NODES[fromId].kind));
+    [fromId, toId].forEach(function(id){
+      if (nodeMeshes[id]) nodeMeshes[id].material.color.copy(litTint(id));
+      if (nodeRims[id]) nodeRims[id].material.color.copy(litTint(id)).offsetHSL(0, 0, 0.2);
+    });
   }
 
-  // ---------------------------------------------------------------
-  // Game flow
-  // ---------------------------------------------------------------
-  function renderProgress(){
+  // =================================================================
+  // 5. GAME FLOW
+  // =================================================================
+  function renderProgress(complete){
     progressRow.innerHTML = "";
-    STAGE_LABELS.forEach(function(label, i){
+    STAGE_CHIPS.forEach(function(label, i){
       var chip = document.createElement("span");
-      chip.className = "stage-chip" + (i<state.step ? " done" : (i===state.step ? " current":""));
+      var cls = "stage-chip";
+      if (complete || i < state.step) cls += " done";
+      else if (i === state.step) cls += " current";
+      chip.className = cls;
       chip.textContent = label;
       progressRow.appendChild(chip);
       var arrow = document.createElement("span");
@@ -606,13 +1016,13 @@
       progressRow.appendChild(arrow);
     });
     var goal = document.createElement("span");
-    goal.className = "stage-chip goal";
+    goal.className = "stage-chip goal" + (complete ? " done" : "");
     goal.textContent = "결과";
     progressRow.appendChild(goal);
   }
 
   function renderQuestion(){
-    renderProgress();
+    renderProgress(false);
     updateCameraGoal(state.currentNode, state.step);
     var q = QUESTIONS[state.currentNode];
     hudStageTag.textContent = STAGE_LABELS[state.step] || "결과";
@@ -622,11 +1032,12 @@
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "hud-choice";
-      btn.innerHTML = '<span class="hud-choice__mark">' + (idx===0 ? "A" : "B") + '</span><span>' + choice.label + '</span>';
+      btn.innerHTML = '<span class="hud-choice__mark">' + (idx === 0 ? "A" : "B") + '</span><span>' + choice.label + '</span>';
       btn.addEventListener("click", function(){ selectChoice(choice); });
       hudChoicesEl.appendChild(btn);
     });
     hudQuestion.hidden = false;
+    updateHudPosition();
   }
 
   function setChoicesDisabled(disabled){
@@ -637,7 +1048,8 @@
     setChoicesDisabled(true);
     var fromId = state.currentNode, toId = choice.to;
     lightUpPath(fromId, toId);
-    state.path.push({ from: fromId, to: toId, label: choice.label, stage: STAGE_LABELS[state.step] });
+    state.path.push({ stage: STAGE_LABELS[state.step], label: choice.label, short: choice.short });
+    hudQuestion.hidden = true;
     moveCharacterTo(fromId, toId, function(){
       state.currentNode = toId;
       if (NODES[toId].kind === "summit"){
@@ -649,60 +1061,55 @@
     });
   }
 
-  function renderProgressComplete(){
-    progressRow.innerHTML = "";
-    STAGE_LABELS.forEach(function(label){
-      var chip = document.createElement("span");
-      chip.className = "stage-chip done";
-      chip.textContent = label;
-      progressRow.appendChild(chip);
-      var arrow = document.createElement("span");
-      arrow.className = "stage-arrow";
-      arrow.textContent = "›";
-      progressRow.appendChild(arrow);
-    });
-    var goal = document.createElement("span");
-    goal.className = "stage-chip goal done";
-    goal.textContent = "결과";
-    progressRow.appendChild(goal);
-  }
-
   function showResult(outcomeId){
-    renderProgressComplete();
+    renderProgress(true);
     updateCameraGoal(outcomeId, TOTAL_STEPS);
     hudQuestion.hidden = true;
     panelResult.hidden = false;
     var data = RESULTS[outcomeId];
+    panelResult.setAttribute("data-outcome", outcomeId);
+
     document.getElementById("result-icon").innerHTML = ICONS[data.icon];
     document.getElementById("result-title").textContent = data.title;
     document.getElementById("result-tagline").textContent = data.tagline;
     document.getElementById("result-desc").textContent = data.desc;
 
-    roadmapRow.innerHTML = "";
+    roadmapList.innerHTML = "";
     state.path.forEach(function(p){
-      var chip = document.createElement("div");
-      chip.className = "roadmap-chip";
-      chip.innerHTML = '<span class="rc-label">' + p.stage + '</span><span class="rc-value">' + p.label + '</span>';
-      roadmapRow.appendChild(chip);
-      var arrow = document.createElement("span");
-      arrow.className = "roadmap-arrow";
-      arrow.textContent = "→";
-      roadmapRow.appendChild(arrow);
+      var row = document.createElement("div");
+      row.className = "roadmap-item";
+      row.innerHTML = '<span class="rm-stage"></span><span class="rm-text"></span>';
+      row.querySelector(".rm-stage").textContent = p.stage;
+      row.querySelector(".rm-text").textContent = p.short;
+      roadmapList.appendChild(row);
     });
-    var finalChip = document.createElement("div");
-    finalChip.className = "roadmap-chip final";
-    finalChip.innerHTML = '<span class="rc-label">결과</span><span class="rc-value">' + data.title + '</span>';
-    roadmapRow.appendChild(finalChip);
+    var finalRow = document.createElement("div");
+    finalRow.className = "roadmap-item final";
+    finalRow.innerHTML = '<span class="rm-stage"></span><span class="rm-text"></span>';
+    finalRow.querySelector(".rm-stage").textContent = "결과";
+    finalRow.querySelector(".rm-text").textContent = data.title;
+    roadmapList.appendChild(finalRow);
 
-    var jobsEl = document.getElementById("chips-jobs"); jobsEl.innerHTML = "";
-    data.jobs.forEach(function(j){ var c=document.createElement("span"); c.className="chip"; c.textContent=j; jobsEl.appendChild(c); });
-    var majorsEl = document.getElementById("chips-majors"); majorsEl.innerHTML = "";
-    data.majors.forEach(function(m){ var c=document.createElement("span"); c.className="chip"; c.textContent=m; majorsEl.appendChild(c); });
+    fillChips(document.getElementById("chips-jobs"), data.jobs, "chip");
+    fillChips(document.getElementById("chips-majors"), data.majors, "chip");
+    panelResult.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block:"start" });
+  }
+
+  function fillChips(host, items, cls){
+    host.innerHTML = "";
+    items.forEach(function(v){
+      var c = document.createElement("span");
+      c.className = cls;
+      c.textContent = v;
+      host.appendChild(c);
+    });
   }
 
   function resetSceneColors(){
     Object.keys(nodeMeshes).forEach(function(id){
-      nodeMeshes[id].material.color.set(NODES[id].kind === "summit" ? PALETTE.summitDim : PALETTE.tileDim);
+      var tint = mixTint(LEVEL_TINT[NODES[id].level]);
+      nodeMeshes[id].material.color.copy(tint);
+      nodeRims[id].material.color.copy(tint).offsetHSL(0, 0.1, 0.16);
     });
     Object.keys(edgeMeshes).forEach(function(key){
       edgeMeshes[key].material.color.set(PALETTE.edgeDim);
@@ -712,36 +1119,132 @@
   function restart(){
     state = { step:0, currentNode:"start", path:[] };
     resetSceneColors();
-    character.position.set(NODES.start.x, NODES.start.y+0.28, NODES.start.z);
-    character.rotation.y = 0;
-    restY = NODES.start.y + 0.28;
+    character.position.set(NODES.start.x, NODES.start.y + 0.3, NODES.start.z);
+    character.rotation.y = IDLE_YAW;
+    yawGoal = IDLE_YAW;
+    restY = NODES.start.y + 0.3;
     snapCameraTo("start", 0);
     panelResult.hidden = true;
     hudQuestion.hidden = true;
+    nameInput.value = "";
     screenStart.hidden = false;
     screenPlay.hidden = true;
+    window.scrollTo({ top:0, behavior: reduceMotion ? "auto" : "smooth" });
+  }
+
+  // =================================================================
+  // 6. 9:16 PHOTO CARD EXPORT
+  // =================================================================
+  function buildPhotoCard(outcomeId){
+    var data = RESULTS[outcomeId];
+    var now = new Date();
+    var dateText = now.getFullYear() + "." +
+      ("0" + (now.getMonth()+1)).slice(-2) + "." +
+      ("0" + now.getDate()).slice(-2);
+    document.getElementById("pc-date").textContent = dateText;
+
+    var name = (nameInput.value || "").trim();
+    var nameEl = document.getElementById("pc-name");
+    nameEl.textContent = name ? (name + "의 AI 진로 카드") : "나의 AI 진로 카드";
+
+    document.getElementById("pc-badge").innerHTML = ICONS[data.icon];
+    document.getElementById("pc-title").textContent = data.title;
+    document.getElementById("pc-tagline").textContent = data.tagline;
+
+    var rm = document.getElementById("pc-roadmap");
+    rm.innerHTML = "";
+    state.path.forEach(function(p){
+      var row = document.createElement("div");
+      row.className = "pc-rm-row";
+      row.innerHTML = '<span class="pc-rm-stage"></span><span class="pc-rm-text"></span>';
+      row.querySelector(".pc-rm-stage").textContent = p.stage;
+      row.querySelector(".pc-rm-text").textContent = p.short;
+      rm.appendChild(row);
+    });
+    var last = document.createElement("div");
+    last.className = "pc-rm-row final";
+    last.innerHTML = '<span class="pc-rm-stage"></span><span class="pc-rm-text"></span>';
+    last.querySelector(".pc-rm-stage").textContent = "결과";
+    last.querySelector(".pc-rm-text").textContent = data.title;
+    rm.appendChild(last);
+
+    fillChips(document.getElementById("pc-jobs"), data.jobs, "pc-chip");
+    fillChips(document.getElementById("pc-majors"), data.majors, "pc-chip");
+  }
+
+  // Re-frame the scene as a wide hero shot centred on the character, grab it,
+  // then put the live view back exactly as it was.
+  function captureScene(){
+    var prevTarget = camTarget.clone();
+    var prevGoal = camTargetGoal.clone();
+    var prevZoom = zoomLevel;
+    var prevAspect = stageAspect;
+    var prevYaw = character.rotation.y;
+    var url = "";
+
+    var CARD_ASPECT = 1080/540;
+    renderer.setSize(1080, 540, false);
+    stageAspect = CARD_ASPECT;
+    zoomLevel = 0.27;
+    character.rotation.y = IDLE_YAW;
+    camTarget.set(character.position.x, character.position.y + 0.62, character.position.z);
+    camTarget.addScaledVector(UP_SCREEN, 0.16 * (VIEW_H/2) * zoomLevel);
+    applyCamera();
+    renderer.render(scene, camera);
+    try { url = renderer.domElement.toDataURL("image/png"); } catch(e){ url = ""; }
+
+    camTarget.copy(prevTarget);
+    camTargetGoal.copy(prevGoal);
+    zoomLevel = prevZoom;
+    stageAspect = prevAspect;
+    character.rotation.y = prevYaw;
+    fitRenderer();
+    renderer.render(scene, camera);
+    return url;
   }
 
   function saveResultImage(){
     if (!window.html2canvas) return;
-    var target = document.getElementById("panel-result");
-    var btns = target.querySelector(".btn-row");
-    if (btns) btns.style.visibility = "hidden";
-    window.html2canvas(target, { backgroundColor: null, scale: 2, useCORS: true }).then(function(canvas){
-      if (btns) btns.style.visibility = "";
-      try{
+    var outcomeId = panelResult.getAttribute("data-outcome");
+    if (!outcomeId || !RESULTS[outcomeId]) return;
+
+    saveBtn.disabled = true;
+    saveBtn.textContent = "저장 중...";
+
+    buildPhotoCard(outcomeId);
+    var img = document.getElementById("pc-scene-img");
+    var sceneData = captureScene();
+
+    function render(){
+      window.html2canvas(document.getElementById("photo-card"), {
+        backgroundColor: null, scale: 1, useCORS: true, logging: false,
+        width: 1080, height: 1920, windowWidth: 1080, windowHeight: 1920
+      }).then(function(cv){
+        var fileName = (nameInput.value || "").trim();
         var link = document.createElement("a");
-        link.download = "AI진로카드.png";
-        link.href = canvas.toDataURL("image/png");
+        link.download = (fileName ? fileName + "_" : "") + "AI진로카드.png";
+        link.href = cv.toDataURL("image/png");
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-      }catch(e){}
-    }).catch(function(){
-      if (btns) btns.style.visibility = "";
-    });
+      }).catch(function(){}).then(function(){
+        saveBtn.disabled = false;
+        saveBtn.textContent = "포토카드 저장";
+      });
+    }
+
+    if (sceneData){
+      img.onload = function(){ img.onload = null; render(); };
+      img.onerror = function(){ img.onerror = null; render(); };
+      img.src = sceneData;
+    } else {
+      render();
+    }
   }
 
+  // =================================================================
+  // 7. WIRING
+  // =================================================================
   document.getElementById("btn-start").addEventListener("click", function(){
     screenStart.hidden = true;
     screenPlay.hidden = false;
@@ -749,13 +1252,10 @@
     renderQuestion();
   });
   document.getElementById("btn-restart").addEventListener("click", restart);
-  document.getElementById("btn-save-image").addEventListener("click", saveResultImage);
+  saveBtn.addEventListener("click", saveResultImage);
 
-  try{
-    if (window.claude && window.claude.hot){
-      window.claude.hot.snapshot(function(){ return { state: state }; });
-    }
-  }catch(e){}
+  // Expose a tiny hook so the branching can be audited from the console.
+  window.AI_TRAIL = { NODES:NODES, QUESTIONS:QUESTIONS, RESULTS:RESULTS, state:function(){ return state; } };
 })();
 </script>
 
